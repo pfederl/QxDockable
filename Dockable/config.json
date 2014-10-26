@@ -1,0 +1,117 @@
+{
+    "name"    : "Dockable",
+
+    "include" :
+        [
+            {
+                "path" : "${QOOXDOO_PATH}/tool/data/config/application.json"
+            }
+        ],
+
+    "export" :
+        [
+            "api",
+            "api-data",
+            "build",
+            "clean",
+            "distclean",
+            "dependencies",
+            "fix",
+            "info",
+            "inspector",
+            "lint",
+            "migration",
+            "profiling",
+            "source",
+            "source-all",
+            "source-hybrid",
+            "source-server",
+            "source-server-reload",
+            "source-httpd-config",
+            "test",
+            "test-source",
+            "translation",
+            "validate-config",
+            "validate-manifest",
+            "watch",
+            "pp"
+        ],
+
+    "default-job" : "source-hybrid",
+
+    "let" :
+    {
+        "APPLICATION"  : "dockable",
+        "QOOXDOO_PATH" : "/home/pfederl/Software/qooxdoo-4.0.1-sdk",
+        "QXTHEME"      : "dockable.theme.Theme",
+        "API_EXCLUDE"  : ["qx.test.*", "${APPLICATION}.theme.*", "${APPLICATION}.test.*"],
+        "LOCALES"      : [ "en" ],
+        "CACHE"        : "${TMPDIR}/qx${QOOXDOO_VERSION}/cache",
+        "ROOT"         : ".",
+        "BUILD_PATH"   : "${ROOT}/build"
+
+    },
+
+
+
+    "jobs" :
+    {
+
+        "pp" : {
+            "desc" : "Beautify code",
+            "extend" : ["pretty"],
+
+            "pretty-print": {
+                "general": {
+                    "indent-string": "    ",
+                    "text-width": 100
+                },
+                "comments": {
+                    "block": {
+                        "add": true
+                    },
+                    "trailing": {
+                        "keep-column": true,
+                        "comment-cols": [50, 70, 90],
+                        "padding": "  "
+                    }
+                },
+                "code": {
+                    "align-with-curlies": false,
+                    "open-curly": {
+                        "newline-before": "m",
+                        "indent-before": false
+                    }
+                }
+            }
+        }
+
+        ,
+        "source-script": {
+            "compile-options": {
+                "uris": {
+                    "add-nocache-param": true
+                }
+            }
+        }
+
+        ,
+        "source-all-script": {
+            "compile-options": {
+                "uris": {
+                    "add-nocache-param": true
+                }
+            }
+        }
+
+        ,
+        "source-hybrid-script": {
+            "compile-options": {
+                "uris": {
+                    "add-nocache-param": true
+                }
+            }
+        }
+
+    }
+}
