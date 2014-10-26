@@ -1,0 +1,4 @@
+QxDockable
+==========
+
+Qooxdoo dockable windows
