@@ -15,7 +15,7 @@ qx.Class.define('dockable.Window',
 
         this.m_movingDoneDeferred = new qx.util.DeferredCall(
             this.fireEvent.bind(this,"movingDone"));
-        this.ANIMATION_DURATION = 100;
+        this.ANIMATION_DURATION = 200;
 
     },
 
@@ -51,6 +51,7 @@ qx.Class.define('dockable.Window',
             var r1 = this.m_startingPositionRect;
             if( r1 == null) return;
             var t = 1 - timePassed / this.ANIMATION_DURATION;
+            t = Math.sqrt(t);
             var rect = {
                 left: r1.left * t + r2.left * (1-t),
                 top: r1.top * t + r2.top * (1-t),

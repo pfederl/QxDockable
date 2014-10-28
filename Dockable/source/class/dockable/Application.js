@@ -46,13 +46,13 @@ qx.Class.define("dockable.Application",
 
             var layout = new dockable.DockLayout({
                 type : "grid",
-                rows : 1,
-                rowSizes : [1],
+                rows : 2,
+                rowSizes : [1,2],
                 cols : 4,
                 colSizes : [2, 1, 1, 1]
             });
 
-            layout.setKid( 0, 2, new dockable.DockLayout({
+            layout.setKidLayout( 0, 2, new dockable.DockLayout({
                 rows: 2, cols: 2, rowSizes: [ 1, 1], colSizes: [1,2]
             }));
 
@@ -76,9 +76,9 @@ qx.Class.define("dockable.Application",
 
             doc.add(mainDock,
             {
-                edge: 0
-//                left : 5,
-//                top : 5,
+                edge: 0,
+                left : 50,
+                top : 100
 //                right : 200,
 //                bottom : 5
             });
