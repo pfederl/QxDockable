@@ -21,10 +21,10 @@ qx.Class.define('dockable.DockLayout', {
             this.m_isLeafNode = false;
 
             // now go through the spec
-            this.rows = spec.rows;
-            this.cols = spec.cols;
-            this.colSizes = spec.colSizes;
-            this.rowSizes = spec.rowSizes;
+            this.colSizes = spec.columns;
+            this.rowSizes = spec.rows;
+            this.cols = this.colSizes.length;
+            this.rows = this.rowSizes.length;
 
             // construct kids recursively
             this.kids = [];
@@ -33,7 +33,7 @@ qx.Class.define('dockable.DockLayout', {
             }
 
             // make sure we have enough kids
-            while ( this.kids.length < this.rows * this.cols ) {
+            while ( this.kids.length < this.nRows() * this.nCols() ) {
                 this.kids.push(new dockable.DockLayout(null));
             }
         }
@@ -90,7 +90,7 @@ qx.Class.define('dockable.DockLayout', {
             //
             //            if ( col < 0 || col >= this.cols ) throw "bad col";
 
-            var kidIndex = row * this.cols + col;
+            var kidIndex = row * this.nCols() + col;
             this.kids[kidIndex] = kid;
         },
 
@@ -113,7 +113,7 @@ qx.Class.define('dockable.DockLayout', {
         {
             qx.core.Assert.assert(0 <= row && row < this.nRows(), "Bad row");
             qx.core.Assert.assert(0 <= col && col < this.nCols(), "Bad column");
-            var kidIndex = row * this.cols + col;
+            var kidIndex = row * this.nCols() + col;
             return this.kids[kidIndex];
         },
 
@@ -130,7 +130,7 @@ qx.Class.define('dockable.DockLayout', {
 
         /**
          * Returns number of rows in this layout.
-         * @returns {layout.rows|*|rows|SQLResultSetRowList|Number|HTMLCollection}
+         * @returns {Integer}
          */
         nRows : function ()
         {
@@ -216,8 +216,8 @@ qx.Class.define('dockable.DockLayout', {
             // compute kids
             // recompute kids
             var kidIndex = 0;
-            for ( var row = 0 ; row < this.rows ; row++ ) {
-                for ( var col = 0 ; col < this.cols ; col++ ) {
+            for ( var row = 0 ; row < this.nRows() ; row++ ) {
+                for ( var col = 0 ; col < this.nCols() ; col++ ) {
                     var kidRect = {
                         left : columns[col].pos + rect.left,
                         width : columns[col].width,

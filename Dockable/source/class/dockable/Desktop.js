@@ -15,22 +15,20 @@ qx.Class.define("dockable.Desktop", {
             desktop : true
         }));
         this.setWindowManager(windowManager);
-        this.m_bgCanvas = new qx.ui.embed.Canvas().set(
-            {
-                canvasWidth : 200,
-                canvasHeight : 200,
-                syncDimension : true,
-                anonymous : true
-            });
-        this.m_bgCanvas.addListener("redraw", this._bgCanvasRedraw, this);
-        this.add(this.m_bgCanvas,
-            {
-                left : 0,
-                top : 0,
-                edge : 0
-            });
-        this.m_bgCanvas.setZIndex(2e5);
-        this.m_bgCanvas.getContentElement().setStyle("pointer-events", "none", true);
+        this.m_overlayCanvas = new qx.ui.embed.Canvas().set({
+            canvasWidth : 200,
+            canvasHeight : 200,
+            syncDimension : true,
+            anonymous : true
+        });
+        this.m_overlayCanvas.addListener("redraw", this._bgCanvasRedraw, this);
+        this.add(this.m_overlayCanvas, {
+            left : 0,
+            top : 0,
+            edge : 0
+        });
+        this.m_overlayCanvas.setZIndex(2e5);
+        this.m_overlayCanvas.getContentElement().setStyle("pointer-events", "none", true);
         this.addListener("resize", this._onDesktopResize, this);
 
         this.m_previewWidget = new qx.ui.core.Widget();
@@ -62,19 +60,21 @@ qx.Class.define("dockable.Desktop", {
             var height = data.height;
             var ctx = data.context;
             ctx.fillStyle = "rgba(200,0,0,0.1)";
-//            this.m_allLeafLayouts = [];
-//            this._renderBgCanvas(ctx, this.m_layout, 0, 0, width, height);
-//            console.log("Number of rectangles:", this.m_allLeafLayouts.length);
+            //            this.m_allLeafLayouts = [];
+            //            this._renderBgCanvas(ctx, this.m_layout, 0, 0, width, height);
+            //            console.log("Number of rectangles:", this.m_allLeafLayouts.length);
 
-
-            ctx.fillStyle = "rgba(00,255,0,0.1)";
-            this.m_allLeafLayouts.forEach(function(layout){
+            ctx.fillStyle = "rgba(00,255,0,0.3)";
+            this.m_allLeafLayouts.forEach(function ( layout )
+            {
                 var r = layout.rectangle();
-                ctx.fillRect(r.left+2, r.top+2, r.width-4, r.height-4);
+                ctx.fillRect(r.left, r.top, r.width, r.height);
             });
 
         },
 
+
+/*
         _renderBgCanvas : function ( ctx, layout, left, top, width, height )
         {
             if ( layout.isLeafNode() ) {
@@ -112,6 +112,7 @@ qx.Class.define("dockable.Desktop", {
             }
 
         },
+*/
 
         _onDesktopResize : function ( e )
         {
@@ -140,15 +141,16 @@ qx.Class.define("dockable.Desktop", {
                 }
             }.bind(this));
             // re-render the layout bars
-            this.m_bgCanvas.update();
+            this.m_overlayCanvas.update();
             // update the list of rectangles
             //            this._updateRectangles( this.m_layout);
 
             // go through our list of windows and resize the docked ones
-            this.getWindows().forEach( function(win) {
+            this.getWindows().forEach(function ( win )
+            {
                 var layout = win.getUserData("dockLayout");
-                if( layout != null) {
-                    win.setPositionRect( layout.rectangle());
+                if ( layout != null ) {
+                    win.setPositionRect(layout.rectangle(), 1);
                 }
             });
 
@@ -203,35 +205,35 @@ qx.Class.define("dockable.Desktop", {
 
             return;
 
-/*
-            var wins = this.getWindows();
-            var me = win.getBounds();
-            me = win.getContentElement().getDomElement();
+            /*
+             var wins = this.getWindows();
+             var me = win.getBounds();
+             me = win.getContentElement().getDomElement();
 
-            //            console.log(me);
-            me =
-            {
-                left : me.offsetLeft,
-                top : me.offsetTop
-            };
+             //            console.log(me);
+             me =
+             {
+             left : me.offsetLeft,
+             top : me.offsetTop
+             };
 
-            //            window.me = me;
-            for ( var i = 0 ; i < wins.length ; i++ ) {
-                if ( wins[i] === win )continue;
+             //            window.me = me;
+             for ( var i = 0 ; i < wins.length ; i++ ) {
+             if ( wins[i] === win )continue;
 
-                //                console.log( "processing", wins[i]);
-                var lp = wins[i].getBounds();
+             //                console.log( "processing", wins[i]);
+             var lp = wins[i].getBounds();
 
-                //                console.log( "layoutprops", lp);
-                var left = lp.left + Math.random() * 0.1 * (me.left - lp.left);
-                var top = lp.top + Math.random() * 0.1 * (me.top - lp.top);
-                left += Math.random() * 20 - 10;
-                top += Math.random() * 20 - 10;
-                left = Math.round(left);
-                top = Math.round(top);
-                wins[i].moveTo(left, top);
-            }
-*/
+             //                console.log( "layoutprops", lp);
+             var left = lp.left + Math.random() * 0.1 * (me.left - lp.left);
+             var top = lp.top + Math.random() * 0.1 * (me.top - lp.top);
+             left += Math.random() * 20 - 10;
+             top += Math.random() * 20 - 10;
+             left = Math.round(left);
+             top = Math.round(top);
+             wins[i].moveTo(left, top);
+             }
+             */
         },
 
         /**

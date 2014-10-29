@@ -15,7 +15,7 @@ qx.Class.define('dockable.Window',
 
         this.m_movingDoneDeferred = new qx.util.DeferredCall(
             this.fireEvent.bind(this,"movingDone"));
-        this.ANIMATION_DURATION = 200;
+        this.DEFAULT_ANIMATION_DURATION = 150;
 
     },
 
@@ -44,14 +44,22 @@ qx.Class.define('dockable.Window',
             this.moveTo( rect.left, rect.top);
             this.setWidth( rect.width);
             this.setHeight( rect.height);
+            console.log( "anim count=", this.m_animCount);
         },
         _animationFrameCB: function( timePassed) {
             var r2 = this.m_desiredPositionRect;
             if( r2 == null) return;
             var r1 = this.m_startingPositionRect;
             if( r1 == null) return;
-            var t = 1 - timePassed / this.ANIMATION_DURATION;
-            t = Math.sqrt(t);
+            var t = 1 - timePassed / this.m_animationDuration;
+            t = t * t;
+//            t = Math.sqrt(t);
+
+//            var v = t-1;
+//            var p = 0.3;
+//            t = -Math.pow(2, 10 * v) * Math.sin( (v - p / 4) * 2 * Math.PI / p );
+
+
             var rect = {
                 left: r1.left * t + r2.left * (1-t),
                 top: r1.top * t + r2.top * (1-t),
@@ -62,6 +70,8 @@ qx.Class.define('dockable.Window',
             this.moveTo( Math.round(rect.left), Math.round(rect.top));
             this.setWidth( Math.round(rect.width));
             this.setHeight( Math.round(rect.height));
+
+            this.m_animCount ++;
 
         },
         /**
@@ -91,15 +101,20 @@ qx.Class.define('dockable.Window',
 //                this.fireEvent("movingDone");
             }
         },
-        setPositionRect: function(rect) {
+        setPositionRect: function(rect, duration) {
             console.log("moving window to", rect);
 //            this.moveTo( rect.left, rect.top);
 //            this.setWidth( rect.width);
 //            this.setHeight( rect.height);
+            this.m_animationDuration = duration;
+            if( this.m_animationDuration == null) {
+                this.m_animationDuration = this.DEFAULT_ANIMATION_DURATION;
+            }
 
             this.m_startingPositionRect = qx.lang.Object.clone( this.getBounds());
             this.m_desiredPositionRect = qx.lang.Object.clone( rect);
-            this.m_animationFrame.startSequence( this.ANIMATION_DURATION);
+            this.m_animCount = 0;
+            this.m_animationFrame.startSequence( this.m_animationDuration);
         },
 
         _onMovePointerUp : function(e)

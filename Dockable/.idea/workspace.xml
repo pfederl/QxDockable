@@ -2,14 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d180e255-541b-429a-8e25-4958366d4889" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/class/dockable/Application.js" afterPath="$PROJECT_DIR$/source/class/dockable/Application.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/class/dockable/Desktop.js" afterPath="$PROJECT_DIR$/source/class/dockable/Desktop.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/class/dockable/DockLayout.js" afterPath="$PROJECT_DIR$/source/class/dockable/DockLayout.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/class/dockable/Window.js" afterPath="$PROJECT_DIR$/source/class/dockable/Window.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/class/dockable/WindowManager.js" afterPath="$PROJECT_DIR$/source/class/dockable/WindowManager.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Dockable.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -77,8 +73,8 @@
           <file leaf-file-name="Application.js" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/source/class/dockable/Application.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="502" max-vertical-offset="1545">
-                  <caret line="49" column="33" selection-start-line="49" selection-start-column="33" selection-end-line="49" selection-end-column="33" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1575">
+                  <caret line="58" column="16" selection-start-line="58" selection-start-column="16" selection-end-line="58" selection-end-column="16" />
                   <folding />
                 </state>
               </provider>
@@ -94,11 +90,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Desktop.js" pinned="false" current="true" current-in-tab="true">
+          <file leaf-file-name="Desktop.js" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/source/class/dockable/Desktop.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.73880595" vertical-offset="1755" max-vertical-offset="3720">
-                  <caret line="150" column="61" selection-start-line="150" selection-start-column="61" selection-end-line="150" selection-end-column="61" />
+                <state vertical-scroll-proportion="2.659409" vertical-offset="0" max-vertical-offset="3750">
+                  <caret line="114" column="0" selection-start-line="76" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -118,11 +114,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="DockLayout.js" pinned="false" current="false" current-in-tab="true">
+          <file leaf-file-name="DockLayout.js" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/source/class/dockable/DockLayout.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.7210366" vertical-offset="2872" max-vertical-offset="4605">
-                  <caret line="223" column="54" selection-start-line="223" selection-start-column="54" selection-end-line="223" selection-end-column="54" />
+                <state vertical-scroll-proportion="0.33231708" vertical-offset="142" max-vertical-offset="4605">
+                  <caret line="24" column="33" selection-start-line="24" selection-start-column="33" selection-end-line="24" selection-end-column="33" />
                   <folding />
                 </state>
               </provider>
@@ -131,8 +127,8 @@
           <file leaf-file-name="Window.js" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/source/class/dockable/Window.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1980">
-                  <caret line="17" column="35" selection-start-line="17" selection-start-column="35" selection-end-line="17" selection-end-column="35" />
+                <state vertical-scroll-proportion="-17.518518" vertical-offset="337" max-vertical-offset="2205">
+                  <caret line="54" column="22" selection-start-line="54" selection-start-column="22" selection-end-line="54" selection-end-column="22" />
                   <folding />
                 </state>
               </provider>
@@ -156,12 +152,12 @@
         <option value="$PROJECT_DIR$/source/class/dockable/DockableWindow.js" />
         <option value="$PROJECT_DIR$/source/class/dockable/Docker.js" />
         <option value="$PROJECT_DIR$/config.json" />
-        <option value="$PROJECT_DIR$/source/class/dockable/Window.js" />
         <option value="$PROJECT_DIR$/source/class/dockable/test/DemoTest.js" />
         <option value="$PROJECT_DIR$/source/class/dockable/WindowManager.js" />
+        <option value="$PROJECT_DIR$/source/class/dockable/Window.js" />
         <option value="$PROJECT_DIR$/source/class/dockable/Application.js" />
-        <option value="$PROJECT_DIR$/source/class/dockable/DockLayout.js" />
         <option value="$PROJECT_DIR$/source/class/dockable/Desktop.js" />
+        <option value="$PROJECT_DIR$/source/class/dockable/DockLayout.js" />
       </list>
     </option>
   </component>
@@ -806,6 +802,9 @@
     </configuration>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="StructureViewFactory">
+    <option name="AUTOSCROLL_FROM_SOURCE" value="true" />
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -817,12 +816,12 @@
       <workItem from="1413695935759" duration="674000" />
       <workItem from="1413697157008" duration="2463000" />
       <workItem from="1413831334266" duration="2475000" />
-      <workItem from="1413998102985" duration="46117000" />
+      <workItem from="1413998102985" duration="51132000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="51729000" />
+    <option name="totallyTimeSpent" value="56744000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1050,32 +1049,40 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/source/class/dockable/Window.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1980">
-          <caret line="17" column="35" selection-start-line="17" selection-start-column="35" selection-end-line="17" selection-end-column="35" />
+        <state vertical-scroll-proportion="-17.518518" vertical-offset="337" max-vertical-offset="2205">
+          <caret line="54" column="22" selection-start-line="54" selection-start-column="22" selection-end-line="54" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/EcmaScript5.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.13469985" vertical-offset="958" max-vertical-offset="2865">
+          <caret line="70" column="7" selection-start-line="70" selection-start-column="7" selection-end-line="70" selection-end-column="7" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/source/class/dockable/Application.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="502" max-vertical-offset="1545">
-          <caret line="49" column="33" selection-start-line="49" selection-start-column="33" selection-end-line="49" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/class/dockable/DockLayout.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7210366" vertical-offset="2872" max-vertical-offset="4605">
-          <caret line="223" column="54" selection-start-line="223" selection-start-column="54" selection-end-line="223" selection-end-column="54" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1575">
+          <caret line="58" column="16" selection-start-line="58" selection-start-column="16" selection-end-line="58" selection-end-column="16" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/source/class/dockable/Desktop.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.73880595" vertical-offset="1755" max-vertical-offset="3720">
-          <caret line="150" column="61" selection-start-line="150" selection-start-column="61" selection-end-line="150" selection-end-column="61" />
+        <state vertical-scroll-proportion="2.659409" vertical-offset="0" max-vertical-offset="3750">
+          <caret line="114" column="0" selection-start-line="76" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/class/dockable/DockLayout.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33231708" vertical-offset="142" max-vertical-offset="4605">
+          <caret line="24" column="33" selection-start-line="24" selection-start-column="33" selection-end-line="24" selection-end-column="33" />
           <folding />
         </state>
       </provider>
