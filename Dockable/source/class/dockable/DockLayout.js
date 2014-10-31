@@ -4,6 +4,7 @@
 qx.Class.define('dockable.DockLayout', {
 
     extend : qx.core.Object,
+    include: qx.core.MAssert,
 
     /**
      * constructor
@@ -12,7 +13,7 @@ qx.Class.define('dockable.DockLayout', {
     construct : function ( spec )
     {
         this.base(arguments);
-        this.HandleSize = 3;
+        this.HandleSize = 1;
         this.kids = [];
         if ( spec === null ) {
             this.m_isLeafNode = true;
@@ -65,6 +66,20 @@ qx.Class.define('dockable.DockLayout', {
          * @type {Rectangle} Computed rectangle of this layout.
          */
         m_rectangle : null,
+        m_tenant: null,
+
+        isOccupied: function() {
+            return this.isLeafNode() && this.tenant() != null;
+        },
+
+        setTenant: function( tenant) {
+            this.assert( this.isLeafNode(), "Cannot set tenant on non-leaf node");
+            this.m_tenant = tenant;
+        },
+
+        tenant: function () {
+            return this.m_tenant;
+        },
 
         /**
          * Returns true if this layout element supports inserting custom objects or no.
@@ -84,8 +99,8 @@ qx.Class.define('dockable.DockLayout', {
          */
         setKidLayout : function ( row, col, kid )
         {
-            qx.core.Assert.assert(0 <= row && row < this.nRows(), "Bad row");
-            qx.core.Assert.assert(0 <= col && col < this.nCols(), "Bad column");
+            this.assert(0 <= row && row < this.nRows(), "Bad row");
+            this.assert(0 <= col && col < this.nCols(), "Bad column");
             //            if ( row < 0 || row >= this.rows ) throw "bad row";
             //
             //            if ( col < 0 || col >= this.cols ) throw "bad col";
@@ -111,8 +126,8 @@ qx.Class.define('dockable.DockLayout', {
          */
         getKidLayout : function ( row, col )
         {
-            qx.core.Assert.assert(0 <= row && row < this.nRows(), "Bad row");
-            qx.core.Assert.assert(0 <= col && col < this.nCols(), "Bad column");
+            this.assert(0 <= row && row < this.nRows(), "Bad row");
+            this.assert(0 <= col && col < this.nCols(), "Bad column");
             var kidIndex = row * this.nCols() + col;
             return this.kids[kidIndex];
         },
@@ -155,15 +170,19 @@ qx.Class.define('dockable.DockLayout', {
          */
         forEachLayout : function ( fn )
         {
-            fn(this);
+            var res = fn(this);
+            if( res === "break") return res;
+
             if ( this.isLeafNode() ) return;
             var kidIndex = 0;
             for ( var row = 0 ; row < this.nRows() ; row++ ) {
                 for ( var col = 0 ; col < this.nCols() ; col++ ) {
-                    this.kids[kidIndex].forEachLayout( fn);
+                    res = this.kids[kidIndex].forEachLayout( fn);
+                    if( res === "break") return res;
                     kidIndex++;
                 }
             }
+            return res;
         },
 
         /**
@@ -214,7 +233,6 @@ qx.Class.define('dockable.DockLayout', {
             // compute vertical values
             var rows = compute(this.rowSizes, rect.height, this.HandleSize);
             // compute kids
-            // recompute kids
             var kidIndex = 0;
             for ( var row = 0 ; row < this.nRows() ; row++ ) {
                 for ( var col = 0 ; col < this.nCols() ; col++ ) {
@@ -229,73 +247,6 @@ qx.Class.define('dockable.DockLayout', {
                     kid.recomputeRectangles(kidRect);
                 }
             }
-            return;
-            /*
-             var availWidth = rect.width - (this.cols - 1) * this.HandleSize;
-             var availHeight = rect.height - (this.rows - 1) * this.HandleSize;
-
-             // sum up column sizes
-             var colSum = qx.lang.Array.sum(this.colSizes);
-
-             // figure out horizontal sizing/positions
-             for ( var i = 0 ; i < this.nCols() ; i++ ) {
-
-             }
-
-             // now normalize to pixels (but we now have floating point values)
-             this.colSizes.forEach(function ( val, ind, arr )
-             {
-             arr[ind] = val / colSum * availWidth;
-             });
-
-             // round to integers, keeping the sum
-             var pos = 0;
-             var lastPos = 0;
-             this.colSizes.forEach(function ( val, ind, arr )
-             {
-             var thisPos = Math.round(pos + val);
-             arr[ind] = Math.round(thisPos - lastPos);
-             lastPos = thisPos;
-             pos += val;
-             }, this);
-
-             // do the same for rows
-             var rowSum = 0;
-             this.rowSizes.forEach(function ( val )
-             {
-             rowSum += val;
-             });
-             this.rowSizes.forEach(function ( val, ind, arr )
-             {
-             arr[ind] = val / rowSum * availHeight;
-             });
-             pos = 0;
-             lastPos = 0;
-             this.rowSizes.forEach(function ( val, ind, arr )
-             {
-             var thisPos = Math.round(pos + val);
-             arr[ind] = Math.round(thisPos - lastPos);
-             lastPos = thisPos;
-             pos += val;
-             });
-
-             // recompute kids
-             var kidIndex = 0;
-             for ( var row = 0 ; row < this.rows ; row++ ) {
-             for ( var col = 0 ; col < this.cols ; col++ ) {
-             var kidSize = {
-             width : this.colSizes[col],
-             height : this.rowSizes[row]
-             };
-             var kid = this.kids[kidIndex];
-             kidIndex++;
-             kid.recomputeRectangles(kidSize);
-             }
-             }
-             console.log("colSizes", this.colSizes);
-             console.log("rowSizes", this.rowSizes);
-
-             */
         }
     }
 });

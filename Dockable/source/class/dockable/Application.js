@@ -78,26 +78,29 @@ qx.Class.define("dockable.Application",
 
             doc.add(mainDock,
             {
-                edge: 0,
+                edge: 5,
                 left : 50,
-                top : 100
+                top : 50
 //                right : 200,
 //                bottom : 5
             });
-            mainDock.getContentElement().setStyle("background", "pink");
+//            mainDock.getContentElement().setStyle("background", "pink");
 
             // Add button to document at fixed coordinates
-            var button1 = new qx.ui.form.Button("First Button", "dockable/test.png");
-            mainDock.add(button1,
+            var button1 = new qx.ui.form.Button("Make window", "dockable/test.png");
+            doc.add(button1,
             {
-                left : 100,
-                top : 50
+                left : 5,
+                top : 5
             });
 
             // Add an event listener
+            var winNumber = 1;
             button1.addListener("execute", function(e)
             {
                 var win = new dockable.Window("win1");
+                win.setCaption( "Window " + winNumber);
+                winNumber ++;
                 mainDock.addd(win);
                 win.open();
             });
