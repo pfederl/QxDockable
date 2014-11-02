@@ -36,8 +36,9 @@ qx.Theme.define("dockable.theme.Decoration",
             style :
             {
                 backgroundColor : "background-pane",
-                width : 0,
-                color : "window-border",
+                width : 1,
+                widthBottom : 1,
+                color : "dockwindow-border",
                 widthTop : 0
             }
         },
@@ -46,9 +47,9 @@ qx.Theme.define("dockable.theme.Decoration",
         {
             include : "window-captionbar-active",
             style : {
-                width : 0,
-                color : "window-border",
-                colorBottom : "window-border-caption",
+                width : 1,
+                color : "dockwindow-border",
+                colorBottom : null,
                 radius : [0, 0, 0, 0],
                 gradientStart : ["window-caption-active-start", 30],
                 gradientEnd : ["window-caption-active-end", 70]

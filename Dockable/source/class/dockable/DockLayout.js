@@ -207,17 +207,27 @@ qx.Class.define('dockable.DockLayout', {
                 // res will contain array of {pos,width} objects (integer valued)
                 var res = [];
                 // compute starting values (n+1 to simplify edge case...)
-                var pos = [];
-                pos[0] = 0;
                 var n = sizes.length;
                 var avail = width - (n - 1) * spacer;
                 var sum = qx.lang.Array.sum(sizes);
+                // calculate ideal starting positions (floating point values)
+//                var pos = [0];
+//                for ( var i = 1 ; i <= n ; i++ ) {
+//                    // first a floating point value
+//                    var s = pos[i - 1] + sizes[i - 1] * avail / sum + spacer;
+//                    // now round it to integer
+//                    pos[i] = Math.round(s);
+//                }
+
+                var pos = [0];
                 for ( var i = 1 ; i <= n ; i++ ) {
-                    // first a floating point value
-                    var s = pos[i - 1] + sizes[i - 1] * avail / sum + spacer;
-                    // now round it to integer
-                    pos[i] = Math.round(s);
+                    pos[i] = pos[i - 1] + sizes[i - 1] * avail / sum + spacer;
                 }
+                for ( var i = 0 ; i <= n ; i++ ) {
+                    pos[i] = Math.round(pos[i]);
+                }
+                this.assert( pos[n] === width + spacer, "Internal layout calculation error");
+
                 // compose the result rom pos[] array
                 for ( var i = 0 ; i < n ; i++ ) {
                     res[i] = {
@@ -226,7 +236,7 @@ qx.Class.define('dockable.DockLayout', {
                     };
                 }
                 return res;
-            };
+            }.bind(this);
 
             // compute horizontal values
             var columns = compute(this.colSizes, rect.width, this.HandleSize);

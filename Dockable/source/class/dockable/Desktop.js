@@ -172,6 +172,8 @@ qx.Class.define("dockable.Desktop", {
             win.addListener("moving", this._windowMovingCB.bind(this, win));
             win.addListener("movingDone", this._windowMovingDoneCB.bind(this, win));
             win.addListener("movingStart", this._windowMovingStartCB.bind(this, win));
+
+            this.getWindowManager().updateStack();
         },
 
         _windowMovingDoneCB : function ( win )
@@ -185,6 +187,7 @@ qx.Class.define("dockable.Desktop", {
             this.m_previewWidget.hide();
 
             this.m_underlayCanvas.update();
+            this.getWindowManager().updateStack();
         },
 
         _windowMovingStartCB : function ( win )

@@ -65,9 +65,10 @@ qx.Class.define( "dockable.WindowManager", {
             var windows = this.__desktop.getWindows();
 
             // z-index for all three window kinds
-            var zIndex = this._minZIndex;
-            var zIndexOnTop = zIndex + windows.length * 2;
-            var zIndexModal = zIndex + windows.length * 4;
+            var zIndexDocked = this._minZIndex;
+            var zIndexRegular = zIndexDocked + windows.length * 2;
+            var zIndexOnTop = zIndexRegular + windows.length * 2;
+            var zIndexModal = zIndexOnTop + windows.length * 2;
 
             // marker if there is an active window
             var active = null;
@@ -88,7 +89,7 @@ qx.Class.define( "dockable.WindowManager", {
 
                 // Modal Windows stays on top of AlwaysOnTop Windows, which stays on
 
-                // top of Normal Windows.
+                // top of Normal Windows, which stay on top of docked windows.
                 if ( win.isModal() ) {
                     win.setZIndex( zIndexModal );
                     this.__desktop.blockContent( zIndexModal - 1 );
@@ -101,9 +102,13 @@ qx.Class.define( "dockable.WindowManager", {
                     win.setZIndex( zIndexOnTop );
                     zIndexOnTop += 2;
                 }
+                else if ( win.isDocked() && ! win.isMaximized()) {
+                    win.setZIndex( zIndexDocked );
+                    zIndexDocked += 2;
+                }
                 else {
-                    win.setZIndex( zIndex );
-                    zIndex += 2;
+                    win.setZIndex( zIndexRegular );
+                    zIndexRegular += 2;
                 }
 
                 // store the active window

@@ -171,6 +171,10 @@ qx.Class.define('dockable.Window',
                 }
             },
 
+            /**
+             * Returns true if this window is assocated with a dock layout.
+             * @returns {boolean}
+             */
             isDocked : function ()
             {
                 return this.dockLayout() != null;
