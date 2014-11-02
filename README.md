@@ -1,4 +1,6 @@
 QxDockable
 ==========
 
-Qooxdoo dockable windows
+Qooxdoo dockable windows experiment.
+
+
