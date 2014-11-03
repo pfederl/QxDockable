@@ -1,20 +1,22 @@
 qx.Class.define("dockable.Desktop", {
 
-    extend : qx.ui.core.Widget,
+    //    extend : qx.ui.core.Widget,
+    //
+    //    include : [qx.ui.core.MChildrenHandling, qx.ui.window.MDesktop, qx.ui.core.MBlocker],
+    //
+    //    implement : qx.ui.window.IDesktop,
 
-    include : [qx.ui.core.MChildrenHandling, qx.ui.window.MDesktop, qx.ui.core.MBlocker],
-
-    implement : qx.ui.window.IDesktop,
+    extend : qx.ui.window.Desktop,
 
     construct : function ()
     {
-        this.base(arguments);
         var windowManager = new dockable.WindowManager();
-        this.getContentElement().disableScrolling();
-        this._setLayout(new qx.ui.layout.Canvas().set({
-            desktop : true
-        }));
-        this.setWindowManager(windowManager);
+        this.base(arguments, windowManager);
+        //        this.getContentElement().disableScrolling();
+        //        this._setLayout(new qx.ui.layout.Canvas().set({
+        //            desktop : true
+        //        }));
+        //        this.setWindowManager(windowManager);
 
         // create underlay canvas
         this.m_underlayCanvas = new qx.ui.embed.Canvas().set({
@@ -46,14 +48,65 @@ qx.Class.define("dockable.Desktop", {
 
         this.addListener("resize", this._onDesktopResize, this);
 
-        this.m_previewWidget = new qx.ui.core.Widget();
-        this.m_previewWidget.setBackgroundColor("rgba(255,0,0,0.5)");
-        this.m_previewWidget.setZIndex(2e5 + 1);
-        this.m_previewWidget.exclude();
-        this.add(this.m_previewWidget);
+        //        this.m_previewWidget = new qx.ui.core.Widget();
+        //        this.m_previewWidget.setBackgroundColor("rgba(255,0,0,0.5)");
+        //        this.m_previewWidget.setZIndex(2e5 + 1);
+        //        this.m_previewWidget.exclude();
+        //        this.add(this.m_previewWidget);
+
+        this.addListener("pointermove", function ( e )
+        {
+            if ( e.isShiftPressed() ) {
+                console.log("move", e);
+                e.stopPropagation();
+                e.preventDefault();
+            }
+        }, this, true);
+
     },
 
     members : {
+
+        /**
+         * Draws a rounded rectangle using the current state of the canvas.
+         * If you omit the last three params, it will draw a rectangle
+         * outline with a 5 pixel border radius.
+         * @note copied from http://stackoverflow.com/questions/1255512/how-to-draw-a-rounded-rectangle-on-html-canvas
+         * @param {CanvasRenderingContext2D} ctx
+         * @param {Number} x The top left x coordinate
+         * @param {Number} y The top left y coordinate
+         * @param {Number} width The width of the rectangle
+         * @param {Number} height The height of the rectangle
+         * @param {Number} radius The corner radius. Defaults to 5;
+         * @param {Boolean} fill Whether to fill the rectangle. Defaults to false.
+         * @param {Boolean} stroke Whether to stroke the rectangle. Defaults to true.
+         */
+        roundRect : function ( ctx, x, y, width, height, radius, fill, stroke )
+        {
+            if ( typeof stroke == "undefined" ) {
+                stroke = true;
+            }
+            if ( typeof radius === "undefined" ) {
+                radius = 5;
+            }
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+            if ( stroke ) {
+                ctx.stroke();
+            }
+            if ( fill ) {
+                ctx.fill();
+            }
+        },
 
         /**
          * Set a layout.
@@ -77,7 +130,10 @@ qx.Class.define("dockable.Desktop", {
             var height = data.height;
             var ctx = data.context;
             ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = "rgba(200,0,0,0.1)";
+            ctx.fillStyle = "rgba(0,0,0,0.1)";
+            if( ctx.setLineDash) {
+                ctx.setLineDash( [5,2]);
+            }
 
             this.m_layout.forEachLayout(function ( layout )
             {
@@ -87,6 +143,16 @@ qx.Class.define("dockable.Desktop", {
                 var r = layout.rectangle();
                 ctx.fillRect(r.left, r.top, r.width, r.height);
             });
+
+            if ( this.m_selectedLayout != null ) {
+                ctx.fillStyle = "rgba(0,0,0,0.1)";
+                var r = this.m_selectedLayout.rectangle();
+//                ctx.fillRect(r.left, r.top, r.width, r.height);
+                var w = 3;
+                ctx.lineWidth = w;
+                ctx.strokeStyle = "rgba(0,0,0,1)";
+                this.roundRect( ctx, r.left+w/2, r.top+w/2, r.width-w, r.height-w, 10, true, true);
+            }
         },
 
         /**
@@ -100,10 +166,7 @@ qx.Class.define("dockable.Desktop", {
             var width = data.width;
             var height = data.height;
             var ctx = data.context;
-            ctx.fillStyle = "rgba(200,0,0,0.1)";
-            //            this.m_allLeafLayouts = [];
-            //            this._renderBgCanvas(ctx, this.m_layout, 0, 0, width, height);
-            //            console.log("Number of rectangles:", this.m_allLeafLayouts.length);
+            ctx.clearRect(0, 0, width, height);
 
             ctx.fillStyle = "rgba(00,255,0,0.5)";
             //            this.m_allLeafLayouts.forEach(function ( layout )
@@ -154,7 +217,7 @@ qx.Class.define("dockable.Desktop", {
             // go through our list of windows and resize the docked ones
             this.getWindows().forEach(function ( win )
             {
-//                var layout = win.getUserData("dockLayout");
+                //                var layout = win.getUserData("dockLayout");
                 var layout = win.dockLayout();
                 if ( layout != null ) {
                     win.setPositionRect(layout.rectangle(), 1);
@@ -179,12 +242,12 @@ qx.Class.define("dockable.Desktop", {
         _windowMovingDoneCB : function ( win )
         {
             // if we didn't find a layout for this window, we are done
-            win.setDockLayout( this.m_selectedLayout);
+            win.setDockLayout(this.m_selectedLayout);
             if ( this.m_selectedLayout == null ) return;
             win.setPositionRect(this.m_selectedLayout.rectangle());
             this.m_selectedLayout.setTenant(win);
             this.m_selectedLayout = null;
-            this.m_previewWidget.hide();
+            //            this.m_previewWidget.hide();
 
             this.m_underlayCanvas.update();
             this.getWindowManager().updateStack();
@@ -193,7 +256,7 @@ qx.Class.define("dockable.Desktop", {
         _windowMovingStartCB : function ( win )
         {
             var currLayout = win.dockLayout();
-            if( currLayout != null) {
+            if ( currLayout != null ) {
                 currLayout.setTenant(null);
                 win.setDockLayout(null);
                 this.m_selectedLayout = currLayout;
@@ -214,7 +277,7 @@ qx.Class.define("dockable.Desktop", {
             // unoccupy the layout of this window
             var windowCurrentLayout = win.dockLayout();
             if ( windowCurrentLayout != null ) {
-                win.setDockLayout( null);
+                win.setDockLayout(null);
                 windowCurrentLayout.setTenant(null);
             }
 
@@ -238,15 +301,15 @@ qx.Class.define("dockable.Desktop", {
                 }
             }.bind(this));
 
-            // if we found an available layout, set the preview for it
-            if ( this.m_selectedLayout != null ) {
-                var rect = this.m_selectedLayout.rectangle();
-                this.m_previewWidget.setUserBounds(rect.left, rect.top, rect.width, rect.height);
-                this.m_previewWidget.show();
-            }
-            else {
-                this.m_previewWidget.exclude();
-            }
+            //            // if we found an available layout, set the preview for it
+            //            if ( this.m_selectedLayout != null ) {
+            //                var rect = this.m_selectedLayout.rectangle();
+            //                this.m_previewWidget.setUserBounds(rect.left, rect.top, rect.width, rect.height);
+            //                this.m_previewWidget.show();
+            //            }
+            //            else {
+            //                this.m_previewWidget.exclude();
+            //            }
 
             this.m_underlayCanvas.update();
 
@@ -256,7 +319,7 @@ qx.Class.define("dockable.Desktop", {
          * Data members
          */
         m_layout : null,
-        m_previewWidget : null,
+        //        m_previewWidget : null,
         m_selectedLayout : null,
         m_overlayCanvas : null
 

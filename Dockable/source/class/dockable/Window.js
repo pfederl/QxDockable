@@ -166,10 +166,18 @@ qx.Class.define('dockable.Window',
                 this.m_dockLayout = dockLayout;
                 if( this.isDocked()) {
                     this.setAppearance( "dockwindow");
+                    this.setResizable( false);
                 } else {
                     this.setAppearance( "window");
+                    this.setResizable( true);
                 }
             },
+
+//            __onResizePointerMove : function(e)
+//            {
+//                console.log( "onresizepointermove");
+//                this.base(arguments, e);
+//            },
 
             /**
              * Returns true if this window is assocated with a dock layout.
