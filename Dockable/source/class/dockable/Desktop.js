@@ -169,12 +169,6 @@ qx.Class.define("dockable.Desktop", {
             ctx.clearRect(0, 0, width, height);
 
             ctx.fillStyle = "rgba(00,255,0,0.5)";
-            //            this.m_allLeafLayouts.forEach(function ( layout )
-            //            {
-            //                var r = layout.rectangle();
-            //                ctx.fillRect(r.left, r.top, r.width, r.height);
-            //            });
-
             this.m_layout.forEachLayout(function ( layout )
             {
                 if ( !layout.isLeafNode() ) return;
