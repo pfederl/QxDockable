@@ -143,6 +143,11 @@ qx.Class.define('dockable.Window',
 //                console.log("pointer up");
 //                this.base(arguments, e);
 //            },
+            _onMovePointerDown : function ( e ) {
+                if( ! e.isLeftPressed()) return;
+                this.base(arguments,e);
+            },
+
             _onMovePointerMove : function ( e )
             {
                 this.base(arguments, e);
