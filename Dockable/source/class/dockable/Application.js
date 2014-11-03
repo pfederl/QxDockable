@@ -104,7 +104,14 @@ qx.Class.define("dockable.Application",
                 mainDock.addd(win);
                 win.open();
             });
-            window.mainDock = mainDock;
+
+            doc.addListener("keydown", function(e){
+                console.log("global keydown", e.getKeyCode(), e.getKeyIdentifier());
+            }, this, true);
+            doc.addListener("keydown", function(e){
+                console.log("bglobal keydown", e.getKeyCode(), e.getKeyIdentifier());
+            }, this, false);
+
         }
     }
 });

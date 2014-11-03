@@ -48,24 +48,25 @@ qx.Class.define("dockable.Desktop", {
 
         this.addListener("resize", this._onDesktopResize, this);
 
-        //        this.m_previewWidget = new qx.ui.core.Widget();
-        //        this.m_previewWidget.setBackgroundColor("rgba(255,0,0,0.5)");
-        //        this.m_previewWidget.setZIndex(2e5 + 1);
-        //        this.m_previewWidget.exclude();
-        //        this.add(this.m_previewWidget);
-
-        this.addListener("pointermove", function ( e )
-        {
-            if ( e.isShiftPressed() ) {
-                console.log("move", e);
-                e.stopPropagation();
-                e.preventDefault();
-            }
+        this.addListener("pointermove", this._pointermoveCB, this, true);
+        this.getApplicationRoot().addListener("keydown", function(e){
+            console.log("keydown", e.getKeyCode(), e.getKeyIdentifier());
         }, this, true);
-
     },
 
     members : {
+
+        _pointermoveCB: function(e) {
+            if ( e.isShiftPressed() ) {
+                this.m_overlayCanvas.show();
+                this.m_overlayCanvas.update();
+                e.stopPropagation();
+                e.preventDefault();
+            }
+            else {
+                this.m_overlayCanvas.exclude();
+            }
+        },
 
         /**
          * Draws a rounded rectangle using the current state of the canvas.
@@ -162,18 +163,31 @@ qx.Class.define("dockable.Desktop", {
          */
         _bgOverlayCanvasRedraw : function ( e )
         {
+            console.log( "Redrawing overlay canvas");
             var data = e.getData();
             var width = data.width;
             var height = data.height;
             var ctx = data.context;
             ctx.clearRect(0, 0, width, height);
 
-            ctx.fillStyle = "rgba(00,255,0,0.5)";
-            this.m_layout.forEachLayout(function ( layout )
-            {
-                if ( !layout.isLeafNode() ) return;
-                var r = layout.rectangle();
-                ctx.fillRect(r.left, r.top, r.width, r.height);
+            ctx.fillStyle = "rgba(00,128,0,0.5)";
+            this.m_layout.forEachLayout(function ( layout ) {
+                if ( layout.isLeafNode() ) return;
+                var rect = layout.rectangle();
+                for( var row = 1 ; row < layout.nRows() ; row ++ ) {
+                    var kidLayout = layout.getKidLayout( row, 0);
+                    var kidRect = kidLayout.rectangle();
+                    var y = kidRect.top - kidLayout.HandleSize/2;
+                    ctx.fillRect(rect.left, y, rect.width, kidLayout.HandleSize);
+//                    console.log(rect.left, y, rect.width, kidLayout.HandleSize);
+
+                }
+                for( var col = 1 ; col < layout.nCols() ; col ++ ) {
+                    var kidLayout = layout.getKidLayout( 0, col);
+                    var kidRect = kidLayout.rectangle();
+                    var x = kidRect.left - kidLayout.HandleSize/2;
+                    ctx.fillRect(x, rect.top, kidLayout.HandleSize, rect.height);
+                }
             });
         },
 
