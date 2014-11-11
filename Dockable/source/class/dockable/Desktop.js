@@ -49,9 +49,18 @@ qx.Class.define("dockable.Desktop", {
         this.addListener("resize", this._onDesktopResize, this);
 
         this.addListener("pointermove", this._pointermoveCB, this, true);
-        this.getApplicationRoot().addListener("keydown", function(e){
-            console.log("keydown", e.getKeyCode(), e.getKeyIdentifier());
-        }, this, true);
+        this.addListener("keydown", function(e){
+            console.log("desktop keydown", e.getKeyCode(), e.getKeyIdentifier());
+            e.stopPropagation();
+        }, this, false);
+
+        this.resizeWidgets = [];
+//
+//        var widget=new qx.ui.core.Widget();
+//        widget.set({ backgroundColor: "rgba(255,0,0,0.01)", zIndex: 2e5+1, width: 10,
+//        cursor: "col-resize"});
+////        widget.getContentElement().setStyle("pointer-events", "none", true);
+//        this.add( widget, { left: 100, top: 0, bottom: 0});
     },
 
     members : {
@@ -154,6 +163,69 @@ qx.Class.define("dockable.Desktop", {
                 ctx.strokeStyle = "rgba(0,0,0,1)";
                 this.roundRect( ctx, r.left+w/2, r.top+w/2, r.width-w, r.height-w, 10, true, true);
             }
+
+
+            // update resize bars (experimental)
+            var getResizeWidget = function(ind) {
+                if( ind < this.resizeWidgets.length) {
+                    var widget = this.resizeWidgets[ind];
+                    widget.resetWidth();
+                    widget.resetHeight();
+                    widget.show();
+                    widget.clearLayoutProperties();
+                    return widget;
+                }
+                var widget=new qx.ui.core.Widget();
+                widget.set({ backgroundColor: "rgba(255,0,0,0.2)", zIndex: 2e5+1,
+                    cursor: "col-resize"});
+                this.add( widget, {});
+                this.resizeWidgets.push(widget);
+                return widget;
+            }.bind(this);
+            var count = 0;
+            var resizeHandleSize = 10;
+            this.m_layout.forEachLayout(function ( layout ) {
+                if ( layout.isLeafNode() ) return;
+                var rect = layout.rectangle();
+                for( var row = 1 ; row < layout.nRows() ; row ++ ) {
+                    var kidLayout = layout.getKidLayout( row, 0);
+                    var kidRect = kidLayout.rectangle();
+                    var y = kidRect.top - kidLayout.HandleSize/2;
+                    y -= resizeHandleSize/2;
+                    y = Math.round(y);
+                    var rw = getResizeWidget( count);
+                    rw.setCursor( "row-resize");
+                    rw.setLayoutProperties({
+                        left: rect.left,
+                        top: y
+                    });
+                    rw.setWidth( rect.width);
+                    rw.setHeight( resizeHandleSize);
+                    count ++;
+                }
+                for( var col = 1 ; col < layout.nCols() ; col ++ ) {
+                    var kidLayout = layout.getKidLayout( 0, col);
+                    var kidRect = kidLayout.rectangle();
+                    var x = kidRect.left - kidLayout.HandleSize/2;
+                    x -= resizeHandleSize/ 2;
+                    x = Math.round(x);
+//                    ctx.fillRect(x, rect.top, kidLayout.HandleSize, rect.height);
+
+                    var rw = getResizeWidget( count);
+                    rw.setCursor( "col-resize");
+                    rw.setLayoutProperties({
+                        left: x,
+                        top: rect.top
+                    });
+                    rw.setWidth( resizeHandleSize);
+                    rw.setHeight( rect.height);
+                    count ++;
+                }
+            });
+            for( var ind = count ; ind < this.resizeWidgets.length ; ind ++){
+                this.resizeWidgets[ind].exclude();
+            }
+
         },
 
         /**

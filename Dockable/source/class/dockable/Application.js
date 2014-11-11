@@ -94,12 +94,17 @@ qx.Class.define("dockable.Application",
                 top : 5
             });
 
+            doc.add( new qx.ui.form.TextField(), { left: 200, top: 5 });
+
             // Add an event listener
             var winNumber = 1;
             button1.addListener("execute", function(e)
             {
                 var win = new dockable.Window("win1");
+                win.setMinHeight( 10);
+                win.setLayout( new qx.ui.layout.Canvas());
                 win.setCaption( "Window " + winNumber);
+                win.add( new qx.ui.form.TextField(), { edge: 5 });
                 winNumber ++;
                 mainDock.addd(win);
                 win.open();
