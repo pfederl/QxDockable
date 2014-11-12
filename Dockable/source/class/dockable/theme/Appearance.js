@@ -1,14 +1,13 @@
 /* ************************************************************************
 
-   Copyright:
+ Copyright:
 
-   License:
+ License:
 
-   Authors:
+ Authors:
 
-************************************************************************ */
-qx.Theme.define("dockable.theme.Appearance",
-{
+ ************************************************************************ */
+qx.Theme.define("dockable.theme.Appearance", {
     extend : qx.theme.modern.Appearance,
     appearances : {
 
@@ -16,21 +15,20 @@ qx.Theme.define("dockable.theme.Appearance",
             include : "window",
             alias : "window",
 
-            style : function(states)
+            style : function ( states )
             {
                 return {
                     decorator : states.showStatusbar ? "dockwindow-incl-statusbar" :
                         "dockwindow",
-                    contentPadding : [ 10, 10, 10, 10 ],
+                    contentPadding : [10, 10, 10, 10],
                     margin : states.maximized ? 0 : [0, 5, 5, 0]
                 };
             }
 
         },
 
-        "dockwindow/pane" :
-        {
-            style : function(states)
+        "dockwindow/pane" : {
+            style : function ( states )
             {
                 return {
                     decorator : "dockwindow-pane"
@@ -38,10 +36,8 @@ qx.Theme.define("dockable.theme.Appearance",
             }
         },
 
-
-        "dockwindow/captionbar" :
-        {
-            style : function(states)
+        "dockwindow/captionbar" : {
+            style : function ( states )
             {
                 return {
                     decorator : (states.active ? "dockwindow-captionbar-active" :
@@ -49,17 +45,16 @@ qx.Theme.define("dockable.theme.Appearance",
                     textColor : states.active ? "window-caption-active-text" : "text-gray",
                     minHeight : 20,
                     paddingRight : 2
-//                    paddingRight : 0
+                    //                    paddingRight : 0
 
                 };
             }
         },
 
-        "dockwindow/title" :
-        {
+        "dockwindow/title" : {
             include : "window/title",
             alias : "window/title",
-            style : function(states)
+            style : function ( states )
             {
                 return {
                     font : "dockWinTitle"
@@ -67,52 +62,66 @@ qx.Theme.define("dockable.theme.Appearance",
             }
         },
 
-        "dockwindow/maximize-button" :
-        {
+        "dockwindow/maximize-button" : {
             include : "window/maximize-button",
 
-            style : function(states)
+            style : function ( states )
             {
                 return {
-                    margin : [ 2, 2, 2, 2 ]
+                    margin : [2, 2, 2, 2]
                 };
             }
         },
 
-        "dockwindow/close-button" :
-        {
+        "dockwindow/close-button" : {
             include : "window/close-button",
 
-            style : function(states)
+            style : function ( states )
             {
                 return {
-                    margin : [ 2, 2, 2, 2 ]
+                    margin : [2, 2, 2, 2]
                 };
             }
         },
 
-        "dockwindow/minimize-button" :
-        {
+        "dockwindow/minimize-button" : {
             include : "window/minimize-button",
 
-            style : function(states)
+            style : function ( states )
             {
                 return {
-                    margin : [ 2, 2, 2, 2 ]
+                    margin : [2, 2, 2, 2]
                 };
             }
         },
 
-        "dockwindow/restore-button" :
-        {
+        "dockwindow/restore-button" : {
             include : "window/restore-button",
 
-            style : function(states)
+            style : function ( states )
             {
                 return {
-                    margin : [ 2, 2, 2, 2 ]
+                    margin : [2, 2, 2, 2]
                 };
             }
+        },
+
+        "dock-area-splitter" : {
+            include : "widget",
+
+            style : function( states) {
+                if( ! states.dragging) {
+                    return {
+                        backgroundColor: states.hovered ? "rgba(0,128,0,0.2)" : "rgba(0,128,0,0.1)"
+                    }
+                }
+                else {
+                    return {
+                        backgroundColor: "rgba(255,0,0,0.5)"
+                    }
+                }
+            }
+
         }
 
 

@@ -101,9 +101,6 @@ qx.Class.define('dockable.DockLayout', {
         {
             this.assert(0 <= row && row < this.nRows(), "Bad row");
             this.assert(0 <= col && col < this.nCols(), "Bad column");
-            //            if ( row < 0 || row >= this.rows ) throw "bad row";
-            //
-            //            if ( col < 0 || col >= this.cols ) throw "bad col";
 
             var kidIndex = row * this.nCols() + col;
             this.kids[kidIndex] = kid;
@@ -211,14 +208,6 @@ qx.Class.define('dockable.DockLayout', {
                 var avail = width - (n - 1) * spacer;
                 var sum = qx.lang.Array.sum(sizes);
                 // calculate ideal starting positions (floating point values)
-//                var pos = [0];
-//                for ( var i = 1 ; i <= n ; i++ ) {
-//                    // first a floating point value
-//                    var s = pos[i - 1] + sizes[i - 1] * avail / sum + spacer;
-//                    // now round it to integer
-//                    pos[i] = Math.round(s);
-//                }
-
                 var pos = [0];
                 for ( var i = 1 ; i <= n ; i++ ) {
                     pos[i] = pos[i - 1] + sizes[i - 1] * avail / sum + spacer;

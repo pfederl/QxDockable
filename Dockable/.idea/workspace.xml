@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d180e255-541b-429a-8e25-4958366d4889" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/class/dockable/Application.js" afterPath="$PROJECT_DIR$/source/class/dockable/Application.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/class/dockable/DockAreaSplitter.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/class/dockable/theme/Appearance.js" afterPath="$PROJECT_DIR$/source/class/dockable/theme/Appearance.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/class/dockable/Desktop.js" afterPath="$PROJECT_DIR$/source/class/dockable/Desktop.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/class/dockable/DockLayout.js" afterPath="$PROJECT_DIR$/source/class/dockable/DockLayout.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Dockable.iws" />
@@ -79,21 +81,21 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="__init__.js" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/source/class/dockable/__init__.js">
+          <file leaf-file-name="Desktop.js" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/source/class/dockable/Desktop.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="180">
-                  <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="1354" max-vertical-offset="6030">
+                  <caret line="171" column="0" selection-start-line="171" selection-start-column="0" selection-end-line="171" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Desktop.js" pinned="false" current="true" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/source/class/dockable/Desktop.js">
+          <file leaf-file-name="DockAreaSplitter.js" pinned="false" current="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/source/class/dockable/DockAreaSplitter.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.7037037" vertical-offset="2451" max-vertical-offset="6195">
-                  <caret line="209" column="44" selection-start-line="209" selection-start-column="44" selection-end-line="209" selection-end-column="44" />
+                <state vertical-scroll-proportion="0.12652439" vertical-offset="1957" max-vertical-offset="3630">
+                  <caret line="136" column="50" selection-start-line="136" selection-start-column="50" selection-end-line="136" selection-end-column="50" />
                   <folding />
                 </state>
               </provider>
@@ -133,11 +135,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="DockLayout.js" pinned="false" current="false" current-in-tab="false">
+          <file leaf-file-name="DockLayout.js" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/source/class/dockable/DockLayout.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="1890" max-vertical-offset="4020">
-                  <caret line="145" column="11" selection-start-line="145" selection-start-column="11" selection-end-line="145" selection-end-column="11" />
+                <state vertical-scroll-proportion="0.57164633" vertical-offset="3105" max-vertical-offset="3855">
+                  <caret line="232" column="76" selection-start-line="232" selection-start-column="76" selection-end-line="232" selection-end-column="76" />
                   <folding />
                 </state>
               </provider>
@@ -146,9 +148,11 @@
           <file leaf-file-name="Appearance.js" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/source/class/dockable/theme/Appearance.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="1605" max-vertical-offset="1890">
-                  <caret line="107" column="37" selection-start-line="107" selection-start-column="37" selection-end-line="107" selection-end-column="37" />
-                  <folding />
+                <state vertical-scroll-proportion="0.0" vertical-offset="888" max-vertical-offset="2025">
+                  <caret line="119" column="60" selection-start-line="119" selection-start-column="60" selection-end-line="119" selection-end-column="60" />
+                  <folding>
+                    <element signature="n#!!doc" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -166,24 +170,19 @@
           <file leaf-file-name="Window.js" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/source/class/dockable/Window.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="2190" max-vertical-offset="3675">
-                  <caret line="146" column="39" selection-start-line="146" selection-start-column="39" selection-end-line="146" selection-end-column="39" />
+                <state vertical-scroll-proportion="-12.222222" vertical-offset="1395" max-vertical-offset="3675">
+                  <caret line="115" column="25" selection-start-line="115" selection-start-column="16" selection-end-line="115" selection-end-column="25" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Desktop.js" pinned="false" current="false" current-in-tab="true">
+          <file leaf-file-name="Desktop.js" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/source/class/dockable/Desktop.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.45632973" vertical-offset="3435" max-vertical-offset="6195">
-                  <caret line="260" column="28" selection-start-line="260" selection-start-column="0" selection-end-line="261" selection-end-column="0" />
-                  <folding>
-                    <marker date="1415690268218" expanded="true" signature="7006:8672" placeholder="{...}" />
-                    <marker date="1415690268218" expanded="true" signature="7173:7838" placeholder="{...}" />
-                    <marker date="1415690268218" expanded="true" signature="7906:8658" placeholder="{...}" />
-                    <marker date="1415690268218" expanded="true" signature="8751:8817" placeholder="{...}" />
-                  </folding>
+                <state vertical-scroll-proportion="-13.481482" vertical-offset="3206" max-vertical-offset="6030">
+                  <caret line="238" column="0" selection-start-line="238" selection-start-column="0" selection-end-line="238" selection-end-column="0" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -208,14 +207,15 @@
         <option value="$PROJECT_DIR$/config.json" />
         <option value="$PROJECT_DIR$/source/class/dockable/test/DemoTest.js" />
         <option value="$PROJECT_DIR$/source/class/dockable/theme/Font.js" />
-        <option value="$PROJECT_DIR$/source/class/dockable/theme/Appearance.js" />
-        <option value="$PROJECT_DIR$/source/class/dockable/DockLayout.js" />
         <option value="$PROJECT_DIR$/source/class/dockable/theme/Color.js" />
         <option value="$PROJECT_DIR$/source/class/dockable/theme/Decoration.js" />
         <option value="$PROJECT_DIR$/source/class/dockable/WindowManager.js" />
         <option value="$PROJECT_DIR$/source/class/dockable/Window.js" />
         <option value="$PROJECT_DIR$/source/class/dockable/Application.js" />
+        <option value="$PROJECT_DIR$/source/class/dockable/theme/Appearance.js" />
+        <option value="$PROJECT_DIR$/source/class/dockable/DockAreaSplitter.js" />
         <option value="$PROJECT_DIR$/source/class/dockable/Desktop.js" />
+        <option value="$PROJECT_DIR$/source/class/dockable/DockLayout.js" />
       </list>
     </option>
   </component>
@@ -910,12 +910,12 @@
       <workItem from="1413831334266" duration="2475000" />
       <workItem from="1413998102985" duration="77938000" />
       <workItem from="1414998707975" duration="3639000" />
-      <workItem from="1415040069575" duration="5654000" />
+      <workItem from="1415040069575" duration="16770000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="92843000" />
+    <option name="totallyTimeSpent" value="103959000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -946,6 +946,7 @@
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3295562" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3295562" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -956,16 +957,15 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Grunt" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3295562" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3295562" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16240682" sideWeight="0.5004721" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16240682" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16240682" sideWeight="0.49952784" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16240682" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3295562" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1053,7 +1053,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1605" max-vertical-offset="1890">
           <caret line="107" column="37" selection-start-line="107" selection-start-column="37" selection-end-line="107" selection-end-column="37" />
-          <folding />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1133,7 +1135,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1926" max-vertical-offset="2268">
           <caret line="107" column="37" selection-start-line="107" selection-start-column="37" selection-end-line="107" selection-end-column="37" />
-          <folding />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1181,7 +1185,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="345">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1245,6 +1251,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1032">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1277,14 +1284,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/source/class/dockable/theme/Appearance.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="348" max-vertical-offset="1770">
-          <caret line="107" column="37" selection-start-line="107" selection-start-column="37" selection-end-line="107" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/source/class/dockable/theme/Color.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
@@ -1313,21 +1312,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33283582" vertical-offset="17207" max-vertical-offset="32805">
           <caret line="1162" column="35" selection-start-line="1162" selection-start-column="35" selection-end-line="1162" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/class/dockable/Window.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2190" max-vertical-offset="3675">
-          <caret line="146" column="39" selection-start-line="146" selection-start-column="39" selection-end-line="146" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/class/dockable/DockLayout.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1890" max-vertical-offset="4020">
-          <caret line="145" column="11" selection-start-line="145" selection-start-column="11" selection-end-line="145" selection-end-column="11" />
           <folding />
         </state>
       </provider>
@@ -1340,10 +1324,52 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/source/class/dockable/theme/Appearance.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="888" max-vertical-offset="2025">
+          <caret line="119" column="60" selection-start-line="119" selection-start-column="60" selection-end-line="119" selection-end-column="60" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/class/dockable/Window.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-12.222222" vertical-offset="1395" max-vertical-offset="3675">
+          <caret line="115" column="25" selection-start-line="115" selection-start-column="16" selection-end-line="115" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/script/dockable.8ef8d0f4f6d5.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.30290872" vertical-offset="951208" max-vertical-offset="1176120">
+          <caret line="63434" column="7" selection-start-line="63434" selection-start-column="7" selection-end-line="63434" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/source/class/dockable/Desktop.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7037037" vertical-offset="2451" max-vertical-offset="6195">
-          <caret line="209" column="44" selection-start-line="209" selection-start-column="44" selection-end-line="209" selection-end-column="44" />
+        <state vertical-scroll-proportion="-13.481482" vertical-offset="3206" max-vertical-offset="6030">
+          <caret line="238" column="0" selection-start-line="238" selection-start-column="0" selection-end-line="238" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/class/dockable/DockAreaSplitter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.12652439" vertical-offset="1957" max-vertical-offset="3630">
+          <caret line="136" column="50" selection-start-line="136" selection-start-column="50" selection-end-line="136" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/class/dockable/DockLayout.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.57164633" vertical-offset="3105" max-vertical-offset="3855">
+          <caret line="232" column="76" selection-start-line="232" selection-start-column="76" selection-end-line="232" selection-end-column="76" />
           <folding />
         </state>
       </provider>

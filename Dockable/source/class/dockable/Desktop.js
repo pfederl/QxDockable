@@ -1,3 +1,7 @@
+/**
+ * replacement for qx.ui.window.Desktop with dockable window capabilities.
+ */
+
 qx.Class.define("dockable.Desktop", {
 
     //    extend : qx.ui.core.Widget,
@@ -49,23 +53,25 @@ qx.Class.define("dockable.Desktop", {
         this.addListener("resize", this._onDesktopResize, this);
 
         this.addListener("pointermove", this._pointermoveCB, this, true);
-        this.addListener("keydown", function(e){
+        this.addListener("keydown", function ( e )
+        {
             console.log("desktop keydown", e.getKeyCode(), e.getKeyIdentifier());
             e.stopPropagation();
         }, this, false);
 
-        this.resizeWidgets = [];
-//
-//        var widget=new qx.ui.core.Widget();
-//        widget.set({ backgroundColor: "rgba(255,0,0,0.01)", zIndex: 2e5+1, width: 10,
-//        cursor: "col-resize"});
-////        widget.getContentElement().setStyle("pointer-events", "none", true);
-//        this.add( widget, { left: 100, top: 0, bottom: 0});
+        this._resizeWidgets = [];
+        //
+        //        var widget=new qx.ui.core.Widget();
+        //        widget.set({ backgroundColor: "rgba(255,0,0,0.01)", zIndex: 2e5+1, width: 10,
+        //        cursor: "col-resize"});
+        ////        widget.getContentElement().setStyle("pointer-events", "none", true);
+        //        this.add( widget, { left: 100, top: 0, bottom: 0});
     },
 
     members : {
 
-        _pointermoveCB: function(e) {
+        _pointermoveCB : function ( e )
+        {
             if ( e.isShiftPressed() ) {
                 this.m_overlayCanvas.show();
                 this.m_overlayCanvas.update();
@@ -141,8 +147,8 @@ qx.Class.define("dockable.Desktop", {
             var ctx = data.context;
             ctx.clearRect(0, 0, width, height);
             ctx.fillStyle = "rgba(0,0,0,0.1)";
-            if( ctx.setLineDash) {
-                ctx.setLineDash( [5,2]);
+            if ( ctx.setLineDash ) {
+                ctx.setLineDash([5, 2]);
             }
 
             this.m_layout.forEachLayout(function ( layout )
@@ -157,75 +163,85 @@ qx.Class.define("dockable.Desktop", {
             if ( this.m_selectedLayout != null ) {
                 ctx.fillStyle = "rgba(0,0,0,0.1)";
                 var r = this.m_selectedLayout.rectangle();
-//                ctx.fillRect(r.left, r.top, r.width, r.height);
+                //                ctx.fillRect(r.left, r.top, r.width, r.height);
                 var w = 3;
                 ctx.lineWidth = w;
                 ctx.strokeStyle = "rgba(0,0,0,1)";
-                this.roundRect( ctx, r.left+w/2, r.top+w/2, r.width-w, r.height-w, 10, true, true);
+                this.roundRect(ctx, r.left + w / 2, r.top + w / 2, r.width - w, r.height - w, 10, true, true);
             }
+        },
 
-
-            // update resize bars (experimental)
-            var getResizeWidget = function(ind) {
-                if( ind < this.resizeWidgets.length) {
-                    var widget = this.resizeWidgets[ind];
-                    widget.resetWidth();
-                    widget.resetHeight();
-                    widget.show();
-                    widget.clearLayoutProperties();
-                    return widget;
-                }
-                var widget=new qx.ui.core.Widget();
-                widget.set({ backgroundColor: "rgba(255,0,0,0.2)", zIndex: 2e5+1,
-                    cursor: "col-resize"});
-                this.add( widget, {});
-                this.resizeWidgets.push(widget);
-                return widget;
-            }.bind(this);
+        _updateResizeWidgets : function ()
+        {
             var count = 0;
-            var resizeHandleSize = 10;
-            this.m_layout.forEachLayout(function ( layout ) {
+            this.m_layout.forEachLayout(function ( layout )
+            {
                 if ( layout.isLeafNode() ) return;
                 var rect = layout.rectangle();
-                for( var row = 1 ; row < layout.nRows() ; row ++ ) {
-                    var kidLayout = layout.getKidLayout( row, 0);
-                    var kidRect = kidLayout.rectangle();
-                    var y = kidRect.top - kidLayout.HandleSize/2;
-                    y -= resizeHandleSize/2;
-                    y = Math.round(y);
-                    var rw = getResizeWidget( count);
-                    rw.setCursor( "row-resize");
-                    rw.setLayoutProperties({
-                        left: rect.left,
-                        top: y
-                    });
-                    rw.setWidth( rect.width);
-                    rw.setHeight( resizeHandleSize);
-                    count ++;
+                for ( var row = 1 ; row < layout.nRows() ; row++ ) {
+                    var kidRectPrev = layout.getKidLayout(row - 1, 0).rectangle();
+                    var kidRect = layout.getKidLayout(row, 0).rectangle();
+                    var y = kidRect.top - layout.HandleSize / 2;
+                    var rw = this._getResizeWidget(count);
+                    rw.setOrientation("horizontal");
+                    rw.setPos(rect.left, rect.width, y, kidRectPrev.top, kidRect.top + kidRect.height);
+                    rw.setUserData("index", row);
+                    count++;
                 }
-                for( var col = 1 ; col < layout.nCols() ; col ++ ) {
-                    var kidLayout = layout.getKidLayout( 0, col);
-                    var kidRect = kidLayout.rectangle();
-                    var x = kidRect.left - kidLayout.HandleSize/2;
-                    x -= resizeHandleSize/ 2;
-                    x = Math.round(x);
-//                    ctx.fillRect(x, rect.top, kidLayout.HandleSize, rect.height);
+                for ( var col = 1 ; col < layout.nCols() ; col++ ) {
+                    var kidRectPrev = layout.getKidLayout(0, col - 1).rectangle();
+                    var kidRect = layout.getKidLayout(0, col).rectangle();
+                    var x = kidRect.left - layout.HandleSize / 2;
+                    var rw = this._getResizeWidget(count);
+                    rw.setOrientation("vertical");
+                    rw.setPos(rect.top, rect.height, x, kidRectPrev.left, kidRect.left + kidRect.width);
+                    rw.setUserData("index", col);
+                    count++;
+                }
+            }.bind(this));
+            console.log("count", count);
+            // hide unused splitters
+            for ( var ind = count ; ind < this._resizeWidgets.length ; ind++ ) {
+                this._resizeWidgets[ind].exclude();
+            }
+        },
 
-                    var rw = getResizeWidget( count);
-                    rw.setCursor( "col-resize");
-                    rw.setLayoutProperties({
-                        left: x,
-                        top: rect.top
-                    });
-                    rw.setWidth( resizeHandleSize);
-                    rw.setHeight( rect.height);
-                    count ++;
-                }
-            });
-            for( var ind = count ; ind < this.resizeWidgets.length ; ind ++){
-                this.resizeWidgets[ind].exclude();
+        _getResizeWidget : function ( ind )
+        {
+            if ( this._resizeWidgets[ind] == null ) {
+                var widget = new dockable.DockAreaSplitter();
+                widget.setThickness(5);
+                widget.set({ zIndex : 2e5 + 1 });
+                this.add(widget, {});
+                this._resizeWidgets[ind] = widget;
+                widget.addListener("moved", this._splitterCB, this);
             }
 
+            var widget = this._resizeWidgets[ind];
+            widget.resetWidth();
+            widget.resetHeight();
+            widget.show();
+            widget.clearLayoutProperties();
+            return widget;
+        },
+
+        /**
+         * callback for splitters
+         * @private
+         */
+        _splitterCB : function ( ev )
+        {
+            var data = ev.getData();
+            var splitter = data.splitter;
+            var pos = data.pos;
+            var ind = splitter.getUserData("index");
+            if ( splitter.getOrientation() === "horizontal" ) {
+
+            }
+            else {
+
+            }
+            console.log("moved to:", pos, data);
         },
 
         /**
@@ -235,7 +251,7 @@ qx.Class.define("dockable.Desktop", {
          */
         _bgOverlayCanvasRedraw : function ( e )
         {
-            console.log( "Redrawing overlay canvas");
+            console.log("Redrawing overlay canvas");
             var data = e.getData();
             var width = data.width;
             var height = data.height;
@@ -243,21 +259,22 @@ qx.Class.define("dockable.Desktop", {
             ctx.clearRect(0, 0, width, height);
 
             ctx.fillStyle = "rgba(00,128,0,0.5)";
-            this.m_layout.forEachLayout(function ( layout ) {
+            this.m_layout.forEachLayout(function ( layout )
+            {
                 if ( layout.isLeafNode() ) return;
                 var rect = layout.rectangle();
-                for( var row = 1 ; row < layout.nRows() ; row ++ ) {
-                    var kidLayout = layout.getKidLayout( row, 0);
+                for ( var row = 1 ; row < layout.nRows() ; row++ ) {
+                    var kidLayout = layout.getKidLayout(row, 0);
                     var kidRect = kidLayout.rectangle();
-                    var y = kidRect.top - kidLayout.HandleSize/2;
+                    var y = kidRect.top - kidLayout.HandleSize / 2;
                     ctx.fillRect(rect.left, y, rect.width, kidLayout.HandleSize);
-//                    console.log(rect.left, y, rect.width, kidLayout.HandleSize);
+                    //                    console.log(rect.left, y, rect.width, kidLayout.HandleSize);
 
                 }
-                for( var col = 1 ; col < layout.nCols() ; col ++ ) {
-                    var kidLayout = layout.getKidLayout( 0, col);
+                for ( var col = 1 ; col < layout.nCols() ; col++ ) {
+                    var kidLayout = layout.getKidLayout(0, col);
                     var kidRect = kidLayout.rectangle();
-                    var x = kidRect.left - kidLayout.HandleSize/2;
+                    var x = kidRect.left - kidLayout.HandleSize / 2;
                     ctx.fillRect(x, rect.top, kidLayout.HandleSize, rect.height);
                 }
             });
@@ -280,35 +297,26 @@ qx.Class.define("dockable.Desktop", {
                 height : bounds.height
             });
 
-            // get the list of all rectangles for all layouts (but only the leaf ones)
-            this.m_allLeafLayouts = [];
-            this.m_layout.forEachLayout(function ( layout )
-            {
-                if ( layout.isLeafNode() ) {
-                    this.m_allLeafLayouts.push(layout);
-                }
-            }.bind(this));
+            this._afterLayoutRectanglesAdjusted();
+        },
+
+        _afterLayoutRectanglesAdjusted : function ()
+        {
             // re-render the layout bars
             this.m_underlayCanvas.update();
             this.m_overlayCanvas.update();
-            // update the list of rectangles
-            //            this._updateRectangles( this.m_layout);
+            this._updateResizeWidgets();
 
-            // go through our list of windows and resize the docked ones
+            // go through our list of windows and resize the docked ones (use animation effect)
             this.getWindows().forEach(function ( win )
             {
-                //                var layout = win.getUserData("dockLayout");
                 var layout = win.dockLayout();
                 if ( layout != null ) {
                     win.setPositionRect(layout.rectangle(), 1);
                 }
             });
-
         },
 
-        //        _updateRectangles:function( layout) {
-        //
-        //        },
         addd : function ( win )
         {
             this.add(win);
@@ -346,14 +354,6 @@ qx.Class.define("dockable.Desktop", {
 
         _windowMovingCB : function ( win, e )
         {
-            //            console.log("mooving", e.getData());
-            //            var me = win.getContentElement().getDomElement();
-            //            me =
-            //            {
-            //                left : me.offsetLeft,
-            //                top : me.offsetTop
-            //            };
-
             // unoccupy the layout of this window
             var windowCurrentLayout = win.dockLayout();
             if ( windowCurrentLayout != null ) {
@@ -381,27 +381,16 @@ qx.Class.define("dockable.Desktop", {
                 }
             }.bind(this));
 
-            //            // if we found an available layout, set the preview for it
-            //            if ( this.m_selectedLayout != null ) {
-            //                var rect = this.m_selectedLayout.rectangle();
-            //                this.m_previewWidget.setUserBounds(rect.left, rect.top, rect.width, rect.height);
-            //                this.m_previewWidget.show();
-            //            }
-            //            else {
-            //                this.m_previewWidget.exclude();
-            //            }
-
             this.m_underlayCanvas.update();
-
         },
 
         /**
          * Data members
          */
         m_layout : null,
-        //        m_previewWidget : null,
         m_selectedLayout : null,
-        m_overlayCanvas : null
+        m_overlayCanvas : null,
+        _resizeWidgets : null
 
     }
 });
