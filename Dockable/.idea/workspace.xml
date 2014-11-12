@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d180e255-541b-429a-8e25-4958366d4889" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/class/dockable/DockAreaSplitter.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/class/dockable/theme/Appearance.js" afterPath="$PROJECT_DIR$/source/class/dockable/theme/Appearance.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/class/dockable/Desktop.js" afterPath="$PROJECT_DIR$/source/class/dockable/Desktop.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/class/dockable/DockLayout.js" afterPath="$PROJECT_DIR$/source/class/dockable/DockLayout.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Dockable.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -81,21 +77,28 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Desktop.js" pinned="false" current="false" current-in-tab="false">
+          <file leaf-file-name="Desktop.js" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/source/class/dockable/Desktop.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="1354" max-vertical-offset="6030">
-                  <caret line="171" column="0" selection-start-line="171" selection-start-column="0" selection-end-line="171" selection-end-column="0" />
-                  <folding />
+                <state vertical-scroll-proportion="0.5427683" vertical-offset="4541" max-vertical-offset="6450">
+                  <caret line="326" column="0" selection-start-line="320" selection-start-column="0" selection-end-line="326" selection-end-column="0" />
+                  <folding>
+                    <marker date="1415774511476" expanded="true" signature="2489:15947" placeholder="{&quot;m_layout&quot;: null...}" />
+                    <marker date="1415774511476" expanded="true" signature="6369:8389" placeholder="{...}" />
+                    <marker date="1415774511476" expanded="true" signature="6470:8141" placeholder="{...}" />
+                    <marker date="1415774511476" expanded="true" signature="6637:7348" placeholder="{...}" />
+                    <marker date="1415774511476" expanded="true" signature="7416:8127" placeholder="{...}" />
+                    <marker date="1415774511476" expanded="true" signature="9177:10590" placeholder="{...}" />
+                  </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="DockAreaSplitter.js" pinned="false" current="false" current-in-tab="true">
+          <file leaf-file-name="DockAreaSplitter.js" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/source/class/dockable/DockAreaSplitter.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.12652439" vertical-offset="1957" max-vertical-offset="3630">
-                  <caret line="136" column="50" selection-start-line="136" selection-start-column="50" selection-end-line="136" selection-end-column="50" />
+                <state vertical-scroll-proportion="-8.074074" vertical-offset="2587" max-vertical-offset="3630">
+                  <caret line="187" column="8" selection-start-line="187" selection-start-column="8" selection-end-line="187" selection-end-column="8" />
                   <folding />
                 </state>
               </provider>
@@ -135,10 +138,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="DockLayout.js" pinned="false" current="true" current-in-tab="true">
+          <file leaf-file-name="DockLayout.js" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/source/class/dockable/DockLayout.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.57164633" vertical-offset="3105" max-vertical-offset="3855">
+                <state vertical-scroll-proportion="-13.888889" vertical-offset="3105" max-vertical-offset="3855">
                   <caret line="232" column="76" selection-start-line="232" selection-start-column="76" selection-end-line="232" selection-end-column="76" />
                   <folding />
                 </state>
@@ -177,11 +180,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Desktop.js" pinned="false" current="false" current-in-tab="false">
+          <file leaf-file-name="Desktop.js" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/source/class/dockable/Desktop.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-13.481482" vertical-offset="3206" max-vertical-offset="6030">
-                  <caret line="238" column="0" selection-start-line="238" selection-start-column="0" selection-end-line="238" selection-end-column="0" />
+                <state vertical-scroll-proportion="0.3561431" vertical-offset="3461" max-vertical-offset="6450">
+                  <caret line="246" column="0" selection-start-line="246" selection-start-column="0" selection-end-line="246" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -214,8 +217,8 @@
         <option value="$PROJECT_DIR$/source/class/dockable/Application.js" />
         <option value="$PROJECT_DIR$/source/class/dockable/theme/Appearance.js" />
         <option value="$PROJECT_DIR$/source/class/dockable/DockAreaSplitter.js" />
-        <option value="$PROJECT_DIR$/source/class/dockable/Desktop.js" />
         <option value="$PROJECT_DIR$/source/class/dockable/DockLayout.js" />
+        <option value="$PROJECT_DIR$/source/class/dockable/Desktop.js" />
       </list>
     </option>
   </component>
@@ -910,12 +913,12 @@
       <workItem from="1413831334266" duration="2475000" />
       <workItem from="1413998102985" duration="77938000" />
       <workItem from="1414998707975" duration="3639000" />
-      <workItem from="1415040069575" duration="16770000" />
+      <workItem from="1415040069575" duration="18329000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="103959000" />
+    <option name="totallyTimeSpent" value="105518000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1350,26 +1353,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/source/class/dockable/Desktop.js">
+    <entry file="file://$PROJECT_DIR$/source/class/dockable/DockLayout.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-13.481482" vertical-offset="3206" max-vertical-offset="6030">
-          <caret line="238" column="0" selection-start-line="238" selection-start-column="0" selection-end-line="238" selection-end-column="0" />
+        <state vertical-scroll-proportion="-13.888889" vertical-offset="3105" max-vertical-offset="3855">
+          <caret line="232" column="76" selection-start-line="232" selection-start-column="76" selection-end-line="232" selection-end-column="76" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/source/class/dockable/DockAreaSplitter.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.12652439" vertical-offset="1957" max-vertical-offset="3630">
-          <caret line="136" column="50" selection-start-line="136" selection-start-column="50" selection-end-line="136" selection-end-column="50" />
+        <state vertical-scroll-proportion="-8.074074" vertical-offset="2587" max-vertical-offset="3630">
+          <caret line="187" column="8" selection-start-line="187" selection-start-column="8" selection-end-line="187" selection-end-column="8" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/source/class/dockable/DockLayout.js">
+    <entry file="file://$PROJECT_DIR$/source/class/dockable/Desktop.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.57164633" vertical-offset="3105" max-vertical-offset="3855">
-          <caret line="232" column="76" selection-start-line="232" selection-start-column="76" selection-end-line="232" selection-end-column="76" />
+        <state vertical-scroll-proportion="0.3561431" vertical-offset="3461" max-vertical-offset="6450">
+          <caret line="246" column="0" selection-start-line="246" selection-start-column="0" selection-end-line="246" selection-end-column="0" />
           <folding />
         </state>
       </provider>

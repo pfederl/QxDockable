@@ -186,6 +186,9 @@ qx.Class.define("dockable.Desktop", {
                     rw.setOrientation("horizontal");
                     rw.setPos(rect.left, rect.width, y, kidRectPrev.top, kidRect.top + kidRect.height);
                     rw.setUserData("index", row);
+                    rw.setUserData("layout", layout);
+                    rw.setUserData("kidRect", kidRect);
+                    rw.setUserData("kidRectPrev", kidRectPrev);
                     count++;
                 }
                 for ( var col = 1 ; col < layout.nCols() ; col++ ) {
@@ -196,6 +199,9 @@ qx.Class.define("dockable.Desktop", {
                     rw.setOrientation("vertical");
                     rw.setPos(rect.top, rect.height, x, kidRectPrev.left, kidRect.left + kidRect.width);
                     rw.setUserData("index", col);
+                    rw.setUserData("layout", layout);
+                    rw.setUserData("kidRect", kidRect);
+                    rw.setUserData("kidRectPrev", kidRectPrev);
                     count++;
                 }
             }.bind(this));
@@ -235,8 +241,30 @@ qx.Class.define("dockable.Desktop", {
             var splitter = data.splitter;
             var pos = data.pos;
             var ind = splitter.getUserData("index");
-            if ( splitter.getOrientation() === "horizontal" ) {
+            var layout = splitter.getUserData("layout");
+            var kidRect = splitter.getUserData("kidRect");
+            var kidRectPrev = splitter.getUserData("kidRectPrev");
 
+            var sizeArray = splitter.getOrientation() === "horizontal" ? layout.rowSizes : layout.colSizes;
+            var combinedSize = kidRect.width + kidRectPrev.width + layout.HandleSize;
+            var combinedWeight = sizeArray[ind] + sizeArray[ind-1];
+            var newSize1 = pos - kidRectPrev.left;
+            var newSize2 = combinedSize - newSize1 - layout.HandleSize;
+            var newWeight1 = newSize1 / combinedSize * combinedWeight;
+            var newWeight2 = newSize2 / combinedSize * combinedWeight;
+            sizeArray[ind] = newWeight1;
+            sizeArray[ind-1] = newWeight2;
+            var rect = this.getBounds();
+            this.m_layout.recomputeRectangles({
+                left : 0,
+                top : 0,
+                width : rect.width,
+                height : rect.height
+            });
+
+            this._afterLayoutRectanglesAdjusted();
+
+            if ( splitter.getOrientation() === "horizontal" ) {
             }
             else {
 
