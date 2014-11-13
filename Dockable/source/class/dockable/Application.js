@@ -44,14 +44,17 @@ qx.Class.define("dockable.Application",
             var doc = this.getRoot();
             var mainDock = new dockable.Desktop();
 
-            var layout = new dockable.DockLayout({
+//            var layout = new dockable.DockLayout({
+//                type : "grid",
+//                rows : [1,2],
+//                columns : [2, 1]
+//            });
+
+
+                        var layout = new dockable.DockLayout({
                 type : "grid",
-                rows : [1,2],
+                rows : [2, 1, 0.5],
                 columns : [2, 1, 1, 1]
-//                rows : 2,
-//                rowSizes : [1,2],
-//                cols : 4,
-//                colSizes : [2, 1, 1, 1]
             });
 
             layout.setKidLayout( 0, 2, new dockable.DockLayout({

@@ -13,7 +13,6 @@ qx.Class.define('dockable.DockLayout', {
     construct : function ( spec )
     {
         this.base(arguments);
-        this.HandleSize = 1;
         this.kids = [];
         if ( spec === null ) {
             this.m_isLeafNode = true;
@@ -54,6 +53,17 @@ qx.Class.define('dockable.DockLayout', {
     },
 
     /**
+     * Properties
+     */
+    properties : {
+      gap : {
+          init : 50,
+          check : "Integer",
+          apply : "_applyGap"
+      }
+    },
+
+    /**
      * members
      */
     members : {
@@ -68,6 +78,57 @@ qx.Class.define('dockable.DockLayout', {
         m_rectangle : null,
         m_tenant: null,
 
+        /**
+         * Adjusts the weights to make sure the column starts at pixel 'pos'. Rectangles
+         * are automatically recalculated after this. This is normally called when the
+         * dock splitters are moved by the user.
+         *
+         * @param col {Integer} the column to adjust (must be > 0)
+         * @param pos {Integer} Pixel position.
+         */
+        adjustColumnToStartAt : function ( col, pos) {
+            var kidRect = this.getKidLayout( 0, col).rectangle();
+            var kidRectPrev = this.getKidLayout( 0, col-1).rectangle();
+            var sizeArray = this.colSizes;
+            var combinedSize = kidRect.width + kidRectPrev.width;
+            var combinedWeight = sizeArray[col] + sizeArray[col-1];
+            var newSize1 = pos - kidRectPrev.left - this.getGap()/2;
+            var newSize2 = combinedSize - newSize1;
+            var newWeight1 = newSize1 / combinedSize * combinedWeight;
+            var newWeight2 = newSize2 / combinedSize * combinedWeight;
+            sizeArray[col-1] = newWeight1;
+            sizeArray[col] = newWeight2;
+            this.recomputeRectangles();
+        },
+
+        /**
+         * Adjusts the weights to make sure the row starts at pixel 'pos'. Rectangles
+         * are automatically recalculated after this. This is normally called when the
+         * dock splitters are moved by the user.
+         *
+         * @param row {Integer} the row to adjust (must be > 0)
+         * @param pos {Integer} Pixel position.
+         */
+        adjustRowToStartAt : function ( row, pos) {
+            var kidRect = this.getKidLayout( row, 0).rectangle();
+            var kidRectPrev = this.getKidLayout( row-1, 0).rectangle();
+            var sizeArray = this.rowSizes;
+            var combinedSize = kidRect.height + kidRectPrev.height;
+            var combinedWeight = sizeArray[row] + sizeArray[row-1];
+            var newSize1 = pos - kidRectPrev.top - this.getGap()/2;;
+            var newSize2 = combinedSize - newSize1;
+            var newWeight1 = newSize1 / combinedSize * combinedWeight;
+            var newWeight2 = newSize2 / combinedSize * combinedWeight;
+            sizeArray[row-1] = newWeight1;
+            sizeArray[row] = newWeight2;
+            this.recomputeRectangles();
+        },
+
+
+        /**
+         * Is the layout occupied by a tenant?
+         * @returns {Boolean|boolean} True means it's occupied.
+         */
         isOccupied: function() {
             return this.isLeafNode() && this.tenant() != null;
         },
@@ -187,11 +248,14 @@ qx.Class.define('dockable.DockLayout', {
          * recursively. This is little more complicated than it would seem
          * at a first glance, mainly because sizes can be specified as floating point
          * values, but on the screen rectangles must have integer positions/sizes,
-         * @param rect {} object with width and height
+         *
+         * @param rect {Rectangle?null} object with width and height
          */
         recomputeRectangles : function ( rect )
         {
-            console.log("recomputing for rect", rect);
+            if( rect == null) {
+                rect = this.rectangle();
+            }
             // keep the rectangle
             this.m_rectangle = qx.lang.Object.clone(rect);
             // if this is a leaf node we're done
@@ -228,9 +292,9 @@ qx.Class.define('dockable.DockLayout', {
             }.bind(this);
 
             // compute horizontal values
-            var columns = compute(this.colSizes, rect.width, this.HandleSize);
+            var columns = compute(this.colSizes, rect.width, this.getGap());
             // compute vertical values
-            var rows = compute(this.rowSizes, rect.height, this.HandleSize);
+            var rows = compute(this.rowSizes, rect.height, this.getGap());
             // compute kids
             var kidIndex = 0;
             for ( var row = 0 ; row < this.nRows() ; row++ ) {
@@ -246,6 +310,10 @@ qx.Class.define('dockable.DockLayout', {
                     kid.recomputeRectangles(kidRect);
                 }
             }
+        },
+
+        _applyGap : function (value) {
+            this.recomputeRectangles( this.rectangle());
         }
     }
 });

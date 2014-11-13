@@ -25,7 +25,7 @@ qx.Class.define("dockable.DockAreaSplitter", {
         this.addListener("pointerup", this._onPointerUp, this);
         this.addListener("pointermove", this._onPointerMove, this);
         this.addListener("pointerout", this._onPointerOut, this);
-        this.addListener("losecapture", this._onPointerUp, this);
+//        this.addListener("losecapture", this._onPointerUp, this);
 
     },
 
@@ -67,11 +67,18 @@ qx.Class.define("dockable.DockAreaSplitter", {
         },
 
         thickness : {
-            init : 5,
+            init : 25,
             check : "Number",
             themeable : true,
             apply : "_applyThickness"
         }
+
+        //        center : {
+        //            nullable : 0,
+        //            check : "Integer",
+        //            apply : "_applyCenter"
+        //        }
+
 
         //        center : {
         //            nullable : 0,
@@ -108,6 +115,7 @@ qx.Class.define("dockable.DockAreaSplitter", {
         _center : 0,
         _minPos : 0,
         _maxPos : 0,
+        _lastFiredMoved : null,
 
         //        setUserBounds : function ( left, top, width, height )
         //        {
@@ -122,18 +130,20 @@ qx.Class.define("dockable.DockAreaSplitter", {
 
         _onPointerOver : function ( ev )
         {
+            console.log( "das pointer over");
             this.addState("hovered");
         },
 
         _onPointerDown : function ( ev )
         {
+            console.log( "das pointer down");
             // only handle left mouse button
             if ( !ev.isLeftPressed() ) {
                 return;
             }
             this._dragging = true;
             this.addState("dragging");
-            this.capture();
+            this.capture( true);
             var pt = this._getRelativePointer(ev);
             if ( this.getOrientation() === "horizontal" ) {
                 this._clickOffset = this._center - pt.y;
@@ -145,15 +155,17 @@ qx.Class.define("dockable.DockAreaSplitter", {
 
         _onPointerUp : function ( ev )
         {
+            console.log( "das pointer up");
             this._dragging = false;
             this.removeState("dragging");
             this.removeState("hovered");
             this.releaseCapture();
-            this.fireDataEvent( "moved", { splitter: this, pos: this._center });
+            this._fireMovedEvent();
         },
 
         _onPointerMove : function ( ev )
         {
+            console.log( "das pointer move");
             // do nothing if not dragging
             if ( !this._dragging ) return;
 
@@ -176,7 +188,24 @@ qx.Class.define("dockable.DockAreaSplitter", {
 
         _onPointerOut : function ( /*ev*/ )
         {
+            console.log( "das pointer out");
             this.removeState("hovered");
+        },
+
+        /**
+         * Will fire a 'moved' event, but only if the previous moved event was different.
+         * @private
+         */
+        _fireMovedEvent : function() {
+            if( this.fmecounter == null) {
+                this.fmecounter = 0;
+            }
+            console.log( "fme #" + this.fmecounter + " " + this._lastFiredMoved + " -> " + this._center);
+
+            if( this._center === this._lastFiredMoved) return;
+            this._lastFiredMoved = this._center;
+            this.fireDataEvent( "moved", { splitter: this, pos: this._center });
+            this.fmecounter ++;
         },
 
         /**
@@ -212,6 +241,7 @@ qx.Class.define("dockable.DockAreaSplitter", {
 
         setPos : function ( start, size, center, minPos, maxPos )
         {
+            console.log( "das setPos", arguments);
             this._start = Math.round(start);
             this._size = Math.round(size);
             this._center = Math.round(center);
@@ -224,7 +254,7 @@ qx.Class.define("dockable.DockAreaSplitter", {
         _updateGeometry : function ()
         {
             var t = this.getThickness();
-            var c1 = Math.trunc(this._center - t / 2);
+            var c1 = Math.floor(this._center - t / 2);
             if ( this.getOrientation() == "horizontal" ) {
                 this.setUserBounds(this._start, c1, this._size, t);
             }

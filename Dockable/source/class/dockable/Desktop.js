@@ -181,31 +181,35 @@ qx.Class.define("dockable.Desktop", {
                 for ( var row = 1 ; row < layout.nRows() ; row++ ) {
                     var kidRectPrev = layout.getKidLayout(row - 1, 0).rectangle();
                     var kidRect = layout.getKidLayout(row, 0).rectangle();
-                    var y = kidRect.top - layout.HandleSize / 2;
+                    var y = kidRect.top - layout.getGap() / 2;
                     var rw = this._getResizeWidget(count);
                     rw.setOrientation("horizontal");
                     rw.setPos(rect.left, rect.width, y, kidRectPrev.top, kidRect.top + kidRect.height);
-                    rw.setUserData("index", row);
-                    rw.setUserData("layout", layout);
-                    rw.setUserData("kidRect", kidRect);
-                    rw.setUserData("kidRectPrev", kidRectPrev);
+                    rw.setUserData( "dockInfo", {
+                        ind: row,
+                        layout: layout,
+                        kidRect: kidRect,
+                        kidRectPrev: kidRectPrev
+                    });
                     count++;
                 }
                 for ( var col = 1 ; col < layout.nCols() ; col++ ) {
                     var kidRectPrev = layout.getKidLayout(0, col - 1).rectangle();
                     var kidRect = layout.getKidLayout(0, col).rectangle();
-                    var x = kidRect.left - layout.HandleSize / 2;
+                    var x = kidRect.left - layout.getGap() / 2;
                     var rw = this._getResizeWidget(count);
                     rw.setOrientation("vertical");
                     rw.setPos(rect.top, rect.height, x, kidRectPrev.left, kidRect.left + kidRect.width);
-                    rw.setUserData("index", col);
-                    rw.setUserData("layout", layout);
-                    rw.setUserData("kidRect", kidRect);
-                    rw.setUserData("kidRectPrev", kidRectPrev);
+                    rw.setUserData( "dockInfo", {
+                        ind: col,
+                        layout: layout,
+                        kidRect: kidRect,
+                        kidRectPrev: kidRectPrev
+                    });
                     count++;
                 }
             }.bind(this));
-            console.log("count", count);
+
             // hide unused splitters
             for ( var ind = count ; ind < this._resizeWidgets.length ; ind++ ) {
                 this._resizeWidgets[ind].exclude();
@@ -216,7 +220,7 @@ qx.Class.define("dockable.Desktop", {
         {
             if ( this._resizeWidgets[ind] == null ) {
                 var widget = new dockable.DockAreaSplitter();
-                widget.setThickness(5);
+                widget.setThickness(25);
                 widget.set({ zIndex : 2e5 + 1 });
                 this.add(widget, {});
                 this._resizeWidgets[ind] = widget;
@@ -238,29 +242,28 @@ qx.Class.define("dockable.Desktop", {
         _splitterCB : function ( ev )
         {
             var data = ev.getData();
+            var dInfo = data.splitter.getUserData( "dockInfo");
+
+            if( data.splitter.getOrientation() == "horizontal") {
+                dInfo.layout.adjustRowToStartAt( dInfo.ind, data.pos);
+            } else {
+                dInfo.layout.adjustColumnToStartAt( dInfo.ind, data.pos);
+            }
+            this._afterLayoutRectanglesAdjusted();
+
+            return;
             var splitter = data.splitter;
             var pos = data.pos;
-            var ind = splitter.getUserData("index");
-            var layout = splitter.getUserData("layout");
-            var kidRect = splitter.getUserData("kidRect");
-            var kidRectPrev = splitter.getUserData("kidRectPrev");
-
-            var sizeArray = splitter.getOrientation() === "horizontal" ? layout.rowSizes : layout.colSizes;
-            var combinedSize = kidRect.width + kidRectPrev.width + layout.HandleSize;
-            var combinedWeight = sizeArray[ind] + sizeArray[ind-1];
-            var newSize1 = pos - kidRectPrev.left;
-            var newSize2 = combinedSize - newSize1 - layout.HandleSize;
+            var sizeArray = splitter.getOrientation() === "horizontal" ? dInfo.layout.rowSizes : dInfo.layout.colSizes;
+            var combinedSize = dInfo.kidRect.width + dInfo.kidRectPrev.width;
+            var combinedWeight = sizeArray[dInfo.ind] + sizeArray[dInfo.ind-1];
+            var newSize1 = pos - dInfo.kidRectPrev.left;
+            var newSize2 = combinedSize - newSize1;
             var newWeight1 = newSize1 / combinedSize * combinedWeight;
             var newWeight2 = newSize2 / combinedSize * combinedWeight;
-            sizeArray[ind] = newWeight1;
-            sizeArray[ind-1] = newWeight2;
-            var rect = this.getBounds();
-            this.m_layout.recomputeRectangles({
-                left : 0,
-                top : 0,
-                width : rect.width,
-                height : rect.height
-            });
+            sizeArray[dInfo.ind] = newWeight1;
+            sizeArray[dInfo.ind-1] = newWeight2;
+            dInfo.layout.recomputeRectangles( dInfo.layout.rectangle());
 
             this._afterLayoutRectanglesAdjusted();
 
@@ -294,16 +297,16 @@ qx.Class.define("dockable.Desktop", {
                 for ( var row = 1 ; row < layout.nRows() ; row++ ) {
                     var kidLayout = layout.getKidLayout(row, 0);
                     var kidRect = kidLayout.rectangle();
-                    var y = kidRect.top - kidLayout.HandleSize / 2;
-                    ctx.fillRect(rect.left, y, rect.width, kidLayout.HandleSize);
-                    //                    console.log(rect.left, y, rect.width, kidLayout.HandleSize);
+                    var y = kidRect.top - kidLayout.getGap() / 2;
+                    ctx.fillRect(rect.left, y, rect.width, kidLayout.getGap());
+                    //                    console.log(rect.left, y, rect.width, kidLayout.getGap());
 
                 }
                 for ( var col = 1 ; col < layout.nCols() ; col++ ) {
                     var kidLayout = layout.getKidLayout(0, col);
                     var kidRect = kidLayout.rectangle();
-                    var x = kidRect.left - kidLayout.HandleSize / 2;
-                    ctx.fillRect(x, rect.top, kidLayout.HandleSize, rect.height);
+                    var x = kidRect.left - kidLayout.getGap() / 2;
+                    ctx.fillRect(x, rect.top, kidLayout.getGap(), rect.height);
                 }
             });
         },
