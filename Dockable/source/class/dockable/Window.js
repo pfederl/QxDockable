@@ -102,7 +102,7 @@ qx.Class.define('dockable.Window',
                 this.base(arguments, state);
                 if ( state === "move" ) {
                     this.setOpacity(0.5);
-                    this.fireEventDeferred( "movingStart");
+                    this.fireEventDeferred("movingStart");
                 }
             },
 
@@ -116,9 +116,7 @@ qx.Class.define('dockable.Window',
                 this.base(arguments, state);
                 if ( state === "move" ) {
                     this.setOpacity(1);
-//                    this.m_movingDoneDeferred.schedule();
-                    //                this.fireEvent("movingDone");
-                                    this.fireEventDeferred("movingDone");
+                    this.fireEventDeferred("movingDone");
                 }
             },
             setPositionRect : function ( rect, duration )
@@ -138,14 +136,15 @@ qx.Class.define('dockable.Window',
                 this.m_animationFrame.startSequence(this.m_animationDuration);
             },
 
-//            _onMovePointerUp : function ( e )
-//            {
-//                console.log("pointer up");
-//                this.base(arguments, e);
-//            },
-            _onMovePointerDown : function ( e ) {
-                if( ! e.isLeftPressed()) return;
-                this.base(arguments,e);
+            //            _onMovePointerUp : function ( e )
+            //            {
+            //                console.log("pointer up");
+            //                this.base(arguments, e);
+            //            },
+            _onMovePointerDown : function ( e )
+            {
+                if ( !e.isLeftPressed() ) return;
+                this.base(arguments, e);
             },
 
             _onMovePointerMove : function ( e )
@@ -169,20 +168,16 @@ qx.Class.define('dockable.Window',
             setDockLayout : function ( dockLayout )
             {
                 this.m_dockLayout = dockLayout;
-                if( this.isDocked()) {
-                    this.setAppearance( "dockwindow");
-                    this.setResizable( false);
-                } else {
-                    this.setAppearance( "window");
-                    this.setResizable( true);
+                if ( this.isDocked() ) {
+                    this.setAppearance("dockwindow");
+                    this.setResizable(false);
+                    this.setPositionRect(this.m_dockLayout.rectangle());
+                }
+                else {
+                    this.setAppearance("window");
+                    this.setResizable(true);
                 }
             },
-
-//            __onResizePointerMove : function(e)
-//            {
-//                console.log( "onresizepointermove");
-//                this.base(arguments, e);
-//            },
 
             /**
              * Returns true if this window is assocated with a dock layout.
@@ -207,8 +202,9 @@ qx.Class.define('dockable.Window',
              **/
             fireEventDeferred : function ( type, clazz, args )
             {
-                this.defer( function() {
-                    this.fireEvent( type, clazz, args);
+                this.defer(function ()
+                {
+                    this.fireEvent(type, clazz, args);
                 }.bind(this));
             },
 
@@ -225,10 +221,11 @@ qx.Class.define('dockable.Window',
              *     the window widget). The default action can be prevented by calling
              *     {@link qx.event.type.Event#preventDefault}
              */
-            fireDataEventDeferred : function(type, data, oldData, cancelable)
+            fireDataEventDeferred : function ( type, data, oldData, cancelable )
             {
-                this.defer( function() {
-                    this.fireDataEvent( type, data, oldData, cancelable);
+                this.defer(function ()
+                {
+                    this.fireDataEvent(type, data, oldData, cancelable);
                 }.bind(this));
             },
 

@@ -78,6 +78,11 @@ qx.Class.define("dockable.Application",
 
             mainDock.setDockLayout( layout);
 
+            var topBar = new qx.ui.container.Composite( new qx.ui.layout.HBox(5));
+            topBar.setBackgroundColor("#ff0000");
+            topBar.setPadding( 5);
+            topBar.getLayout().setAlignY( "middle");
+            doc.add( topBar, { left: 0, top: 0, right: 0});
 
             doc.add(mainDock,
             {
@@ -89,17 +94,10 @@ qx.Class.define("dockable.Application",
             });
 //            mainDock.getContentElement().setStyle("background", "pink");
 
+
             // Add button to document at fixed coordinates
-            var button1 = new qx.ui.form.Button("Make window", "dockable/test.png");
-            doc.add(button1,
-            {
-                left : 5,
-                top : 5
-            });
-
-            doc.add( new qx.ui.form.TextField(), { left: 200, top: 5 });
-
-            // Add an event listener
+            var button1 = new qx.ui.form.Button("Make free window");
+            topBar.add(button1);
             var winNumber = 1;
             button1.addListener("execute", function(e)
             {
@@ -112,6 +110,26 @@ qx.Class.define("dockable.Application",
                 mainDock.addd(win);
                 win.open();
             });
+
+            var button2 = new qx.ui.form.Button("Make docked window");
+            topBar.add(button2);
+            button2.addListener("execute", function(e)
+            {
+                var win = new dockable.Window("win1");
+                win.setMinHeight( 10);
+                win.setLayout( new qx.ui.layout.Canvas());
+                win.setCaption( "Window " + winNumber);
+                win.add( new qx.ui.form.TextField(), { edge: 5 });
+                winNumber ++;
+                mainDock.addd(win);
+                win.open();
+
+            });
+
+            topBar.add( new qx.ui.form.TextField());
+
+            topBar.add( new qx.ui.form.Slider().set({width: 200}));
+
 
             doc.addListener("keydown", function(e){
                 console.log("global keydown", e.getKeyCode(), e.getKeyIdentifier());

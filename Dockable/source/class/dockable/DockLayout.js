@@ -23,8 +23,8 @@ qx.Class.define('dockable.DockLayout', {
             // now go through the spec
             this.colSizes = spec.columns;
             this.rowSizes = spec.rows;
-            this.cols = this.colSizes.length;
-            this.rows = this.rowSizes.length;
+//            this.cols = this.colSizes.length;
+//            this.rows = this.rowSizes.length;
 
             // construct kids recursively
             this.kids = [];
@@ -49,7 +49,7 @@ qx.Class.define('dockable.DockLayout', {
      * events
      */
     events : {
-
+//        "evict" : "qx.event.type.Data"
     },
 
     /**
@@ -57,7 +57,7 @@ qx.Class.define('dockable.DockLayout', {
      */
     properties : {
       gap : {
-          init : 50,
+          init : 5,
           check : "Integer",
           apply : "_applyGap"
       }
@@ -77,6 +77,26 @@ qx.Class.define('dockable.DockLayout', {
          */
         m_rectangle : null,
         m_tenant: null,
+
+        /**
+         * Removes a row from the layout
+         * @param row {Integer} which row to remove (0 based)
+         */
+        removeRow : function ( row) {
+            this.assert(0 <= row && row < this.nRows(), "Bad row");
+            this.rowSizes.splice( row, 1);
+            this.recomputeRectangles();
+        },
+
+        /**
+         * Remove column.
+         * @param col {Integer} which column to remove (0-based)
+         */
+        removeColumn : function (col) {
+            this.assert(0 <= col && col < this.nCols(), "Bad column");
+            this.colSizes.splice( col, 1);
+            this.recomputeRectangles();
+        },
 
         /**
          * Adjusts the weights to make sure the column starts at pixel 'pos'. Rectangles
@@ -198,7 +218,7 @@ qx.Class.define('dockable.DockLayout', {
         nCols : function ()
         {
             if ( this.isLeafNode() ) return 1;
-            return this.cols;
+            return this.colSizes.length;
         },
 
         /**
@@ -208,7 +228,7 @@ qx.Class.define('dockable.DockLayout', {
         nRows : function ()
         {
             if ( this.isLeafNode() ) return 1;
-            return this.rows;
+            return this.rowSizes.length;
         },
 
         /**
@@ -223,6 +243,7 @@ qx.Class.define('dockable.DockLayout', {
         /**
          * Traverses all layouts (and sub-layouts), and invokes the function fn
          * on each.
+         *
          * @param fn {Function} function to invoke. Parameter to this function is
          * the layout reference.
          */

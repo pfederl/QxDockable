@@ -4,23 +4,12 @@
 
 qx.Class.define("dockable.Desktop", {
 
-    //    extend : qx.ui.core.Widget,
-    //
-    //    include : [qx.ui.core.MChildrenHandling, qx.ui.window.MDesktop, qx.ui.core.MBlocker],
-    //
-    //    implement : qx.ui.window.IDesktop,
-
     extend : qx.ui.window.Desktop,
 
     construct : function ()
     {
         var windowManager = new dockable.WindowManager();
         this.base(arguments, windowManager);
-        //        this.getContentElement().disableScrolling();
-        //        this._setLayout(new qx.ui.layout.Canvas().set({
-        //            desktop : true
-        //        }));
-        //        this.setWindowManager(windowManager);
 
         // create underlay canvas
         this.m_underlayCanvas = new qx.ui.embed.Canvas().set({
@@ -59,16 +48,31 @@ qx.Class.define("dockable.Desktop", {
             e.stopPropagation();
         }, this, false);
 
-        this._resizeWidgets = [];
-        //
-        //        var widget=new qx.ui.core.Widget();
-        //        widget.set({ backgroundColor: "rgba(255,0,0,0.01)", zIndex: 2e5+1, width: 10,
-        //        cursor: "col-resize"});
-        ////        widget.getContentElement().setStyle("pointer-events", "none", true);
-        //        this.add( widget, { left: 100, top: 0, bottom: 0});
+        this._splitterWidgets = [];
     },
 
     members : {
+
+        _updateUnderlay : function() {
+            this.m_underlayCanvas.update();
+            return;
+
+            var count = 0;
+            this.m_layout.forEachLayout( function(layout) {
+                if( ! layout.isLeafNode()) return;
+                if( layout.tenant() != null) return;
+                var w = this._getAreaWidget(count);
+                var r = layout.rectangle();
+                w.setUserBounds(r.left, r.top, r.width, r.height);
+                w.setHighlighted( layout == this.m_selectedLayout);
+                count ++;
+            }.bind(this));
+
+            // hide unused area widgets
+            for ( var ind = count ; ind < this._areaWidgets.length ; ind++ ) {
+                this._areaWidgets[ind].exclude();
+            }
+        },
 
         _pointermoveCB : function ( e )
         {
@@ -182,7 +186,7 @@ qx.Class.define("dockable.Desktop", {
                     var kidRectPrev = layout.getKidLayout(row - 1, 0).rectangle();
                     var kidRect = layout.getKidLayout(row, 0).rectangle();
                     var y = kidRect.top - layout.getGap() / 2;
-                    var rw = this._getResizeWidget(count);
+                    var rw = this._getSplitterWidget(count);
                     rw.setOrientation("horizontal");
                     rw.setPos(rect.left, rect.width, y, kidRectPrev.top, kidRect.top + kidRect.height);
                     rw.setUserData( "dockInfo", {
@@ -197,7 +201,7 @@ qx.Class.define("dockable.Desktop", {
                     var kidRectPrev = layout.getKidLayout(0, col - 1).rectangle();
                     var kidRect = layout.getKidLayout(0, col).rectangle();
                     var x = kidRect.left - layout.getGap() / 2;
-                    var rw = this._getResizeWidget(count);
+                    var rw = this._getSplitterWidget(count);
                     rw.setOrientation("vertical");
                     rw.setPos(rect.top, rect.height, x, kidRectPrev.left, kidRect.left + kidRect.width);
                     rw.setUserData( "dockInfo", {
@@ -211,35 +215,55 @@ qx.Class.define("dockable.Desktop", {
             }.bind(this));
 
             // hide unused splitters
-            for ( var ind = count ; ind < this._resizeWidgets.length ; ind++ ) {
-                this._resizeWidgets[ind].exclude();
+            for ( var ind = count ; ind < this._splitterWidgets.length ; ind++ ) {
+                this._splitterWidgets[ind].exclude();
             }
         },
 
-        _getResizeWidget : function ( ind )
+        _getSplitterWidget : function ( ind )
         {
-            if ( this._resizeWidgets[ind] == null ) {
-                var widget = new dockable.DockAreaSplitter();
+            if( this._splitterWidgets == null) {
+                this._splitterWidgets = [];
+            }
+            if ( this._splitterWidgets[ind] == null ) {
+                var widget = new dockable.DockSplitter();
                 widget.setThickness(25);
-                widget.set({ zIndex : 2e5 + 1 });
                 this.add(widget, {});
-                this._resizeWidgets[ind] = widget;
-                widget.addListener("moved", this._splitterCB, this);
+                this._splitterWidgets[ind] = widget;
+                widget.addListener("moved", this._splitterMovedCB, this);
+                widget.addListener("removeMenu", this._splitterRemoveMenuCB, this);
+                this.getWindowManager().addToOverlay( widget, "aboveDock");
             }
 
-            var widget = this._resizeWidgets[ind];
+            var widget = this._splitterWidgets[ind];
             widget.resetWidth();
             widget.resetHeight();
             widget.show();
-            widget.clearLayoutProperties();
             return widget;
         },
 
+        _getAreaWidget : function ( ind )
+        {
+            if( this._areaWidgets == null) {
+                this._areaWidgets = [];
+            }
+            if ( this._areaWidgets[ind] == null ) {
+                var widget = new dockable.DockArea();
+                this.add(widget, {});
+                this._areaWidgets[ind] = widget;
+            }
+
+            var widget = this._areaWidgets[ind];
+            widget.show();
+            return widget;
+        },
+
+
         /**
-         * callback for splitters
+         * callback for splitter moved events
          * @private
          */
-        _splitterCB : function ( ev )
+        _splitterMovedCB : function ( ev )
         {
             var data = ev.getData();
             var dInfo = data.splitter.getUserData( "dockInfo");
@@ -250,30 +274,25 @@ qx.Class.define("dockable.Desktop", {
                 dInfo.layout.adjustColumnToStartAt( dInfo.ind, data.pos);
             }
             this._afterLayoutRectanglesAdjusted();
-
-            return;
-            var splitter = data.splitter;
-            var pos = data.pos;
-            var sizeArray = splitter.getOrientation() === "horizontal" ? dInfo.layout.rowSizes : dInfo.layout.colSizes;
-            var combinedSize = dInfo.kidRect.width + dInfo.kidRectPrev.width;
-            var combinedWeight = sizeArray[dInfo.ind] + sizeArray[dInfo.ind-1];
-            var newSize1 = pos - dInfo.kidRectPrev.left;
-            var newSize2 = combinedSize - newSize1;
-            var newWeight1 = newSize1 / combinedSize * combinedWeight;
-            var newWeight2 = newSize2 / combinedSize * combinedWeight;
-            sizeArray[dInfo.ind] = newWeight1;
-            sizeArray[dInfo.ind-1] = newWeight2;
-            dInfo.layout.recomputeRectangles( dInfo.layout.rectangle());
-
-            this._afterLayoutRectanglesAdjusted();
-
-            if ( splitter.getOrientation() === "horizontal" ) {
-            }
-            else {
-
-            }
-            console.log("moved to:", pos, data);
         },
+
+        /**
+         * callback for splitter removeMenu events
+         * @private
+         */
+        _splitterRemoveMenuCB : function ( ev )
+        {
+            var data = ev.getData();
+            var dInfo = data.splitter.getUserData( "dockInfo");
+
+            if( data.splitter.getOrientation() == "horizontal") {
+                dInfo.layout.removeRow( dInfo.ind - 1);
+            } else {
+                dInfo.layout.removeColumn( dInfo.ind - 1);
+            }
+            this._afterLayoutRectanglesAdjusted();
+        },
+
 
         /**
          * Callback for rendering overlay canvas. Renders the resize bars
@@ -334,11 +353,11 @@ qx.Class.define("dockable.Desktop", {
         _afterLayoutRectanglesAdjusted : function ()
         {
             // re-render the layout bars
-            this.m_underlayCanvas.update();
+            this._updateUnderlay();
             this.m_overlayCanvas.update();
             this._updateResizeWidgets();
 
-            // go through our list of windows and resize the docked ones (use animation effect)
+            // go through our list of windows and resize the docked ones
             this.getWindows().forEach(function ( win )
             {
                 var layout = win.dockLayout();
@@ -360,15 +379,13 @@ qx.Class.define("dockable.Desktop", {
 
         _windowMovingDoneCB : function ( win )
         {
-            // if we didn't find a layout for this window, we are done
             win.setDockLayout(this.m_selectedLayout);
-            if ( this.m_selectedLayout == null ) return;
-            win.setPositionRect(this.m_selectedLayout.rectangle());
-            this.m_selectedLayout.setTenant(win);
-            this.m_selectedLayout = null;
-            //            this.m_previewWidget.hide();
-
-            this.m_underlayCanvas.update();
+            if ( this.m_selectedLayout != null ) {
+//                win.setPositionRect(this.m_selectedLayout.rectangle());
+                this.m_selectedLayout.setTenant(win);
+                this.m_selectedLayout = null;
+            }
+            this._updateUnderlay();
             this.getWindowManager().updateStack();
         },
 
@@ -380,7 +397,8 @@ qx.Class.define("dockable.Desktop", {
                 win.setDockLayout(null);
                 this.m_selectedLayout = currLayout;
             }
-            this.m_underlayCanvas.update();
+            this._updateUnderlay();
+            this.getWindowManager().updateStack();
         },
 
         _windowMovingCB : function ( win, e )
@@ -412,7 +430,7 @@ qx.Class.define("dockable.Desktop", {
                 }
             }.bind(this));
 
-            this.m_underlayCanvas.update();
+            this._updateUnderlay();
         },
 
         /**
@@ -421,7 +439,7 @@ qx.Class.define("dockable.Desktop", {
         m_layout : null,
         m_selectedLayout : null,
         m_overlayCanvas : null,
-        _resizeWidgets : null
+        _splitterWidgets : null
 
     }
 });

@@ -106,23 +106,36 @@ qx.Theme.define("dockable.theme.Appearance", {
             }
         },
 
-        "dock-area-splitter" : {
+        "dock-splitter" : {
             include : "widget",
 
-            style : function( states) {
-                if( ! states.dragging) {
+            style : function ( states )
+            {
+                if ( !states.dragging ) {
                     return {
-                        backgroundColor: states.hovered ? "rgba(0,128,0,0.2)" : "rgba(0,128,0,0.1)"
+                        backgroundColor : states.hovered ? "rgba(0,128,0,0.2)" : "rgba(0,128,0,0.1)"
                     }
                 }
                 else {
                     return {
-                        backgroundColor: "rgba(255,0,0,0.5)"
+                        backgroundColor : "rgba(255,0,0,0.5)"
                     }
                 }
             }
+        },
 
+        "dock-area" : {
+            include : "widget",
+
+            style : function ( states )
+            {
+                return {
+//                    decorator : "dock-area"
+                    decorator : states.highlighted ? "dock-area-highlighted" : "dock-area"
+                }
+            }
         }
+
 
 
     }

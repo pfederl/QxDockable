@@ -1,19 +1,18 @@
 /* ************************************************************************
 
-   Copyright:
+ Copyright:
 
-   License:
+ License:
 
-   Authors:
+ Authors:
 
-************************************************************************ */
-qx.Theme.define("dockable.theme.Decoration",
-{
+ ************************************************************************ */
+qx.Theme.define("dockable.theme.Decoration", {
+
     extend : qx.theme.modern.Decoration,
     decorations : {
 
-        "dockwindow" :
-        {
+        "dockwindow" : {
             include : "window",
             style : {
                 radius : [0, 0, 0, 0],
@@ -30,11 +29,9 @@ qx.Theme.define("dockable.theme.Decoration",
             }
         },
 
-        "dockwindow-pane" :
-        {
+        "dockwindow-pane" : {
             include : "window-pane",
-            style :
-            {
+            style : {
                 backgroundColor : "background-pane",
                 width : 1,
                 widthBottom : 1,
@@ -43,8 +40,7 @@ qx.Theme.define("dockable.theme.Decoration",
             }
         },
 
-        "dockwindow-captionbar-active" :
-        {
+        "dockwindow-captionbar-active" : {
             include : "window-captionbar-active",
             style : {
                 width : 1,
@@ -56,12 +52,27 @@ qx.Theme.define("dockable.theme.Decoration",
             }
         },
 
-        "dockwindow-captionbar-inactive" :
-        {
+        "dockwindow-captionbar-inactive" : {
             include : "dockwindow-captionbar-active",
             style : {
                 gradientStart : ["window-caption-inactive-start", 30],
                 gradientEnd : ["window-caption-inactive-end", 70]
+            }
+        },
+
+        "dock-area" : {
+            style : {
+                backgroundColor : "rgb(255,255,0)",
+                radius : 10
+            }
+        },
+
+        "dock-area-highlighted" : {
+            include : "dock-area",
+            style : {
+                color : "rgb(0,0,0)",
+                width: 3,
+                style : "dotted"
             }
         }
 
