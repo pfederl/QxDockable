@@ -22,9 +22,13 @@ qx.Class.define('dockable.DockLayout', {
 
             // now go through the spec
             this.colSizes = spec.columns;
+            if( this.colSizes == null) {
+                this.colSizes = [1];
+            }
             this.rowSizes = spec.rows;
-//            this.cols = this.colSizes.length;
-//            this.rows = this.rowSizes.length;
+            if( this.rowSizes == null) {
+                this.rowSizes = [1];
+            }
 
             // construct kids recursively
             this.kids = [];
@@ -242,17 +246,30 @@ qx.Class.define('dockable.DockLayout', {
 
         /**
          * Traverses all layouts (and sub-layouts), and invokes the function fn
-         * on each.
+         * on each. It first calls the function on the parent layout, then the children
+         * layouts.
          *
          * @param fn {Function} function to invoke. Parameter to this function is
-         * the layout reference.
+         * the layout reference. If the function returns "break", this will be the last
+         * layout processed. If the function returns "skip", the kids won't be processed,
+         * but siblings will. Otherwise processing will continue.
          */
         forEachLayout : function ( fn )
         {
+            // call the callback on this layout first
             var res = fn(this);
+
+            // if the callback returned "break", we are done, and we propagate
+            // the break to the caller
             if( res === "break") return res;
 
-            if ( this.isLeafNode() ) return;
+            // if the callback returned "skip", or this is a leaf node, we don't process the kids
+            if( res === "skip" || this.isLeafNode()) {
+                return "";
+            }
+
+            // we have to process the kids now (recursively). We only have to pay attention
+            // to "break", in which case we abort processing immediately.
             var kidIndex = 0;
             for ( var row = 0 ; row < this.nRows() ; row++ ) {
                 for ( var col = 0 ; col < this.nCols() ; col++ ) {
@@ -261,7 +278,8 @@ qx.Class.define('dockable.DockLayout', {
                     kidIndex++;
                 }
             }
-            return res;
+
+            return "";
         },
 
         /**
@@ -331,6 +349,37 @@ qx.Class.define('dockable.DockLayout', {
                     kid.recomputeRectangles(kidRect);
                 }
             }
+        },
+
+        /**
+         * Finds a layout under position x,y
+         * @param x {Number}
+         * @param y {Number}
+         */
+        findLayoutXY : function ( x, y) {
+            var nExamined = 0;
+            var selectedLayout = null;
+            //            this.m_selectedLayout = null;
+            this.forEachLayout(function ( layout )
+            {
+                nExamined++;
+                if ( layout.isOccupied() ) return;
+
+                var rect = layout.rectangle();
+                var inside = rect.left < mousePos.x && mousePos.x < rect.left + rect.width
+                    && rect.top < mousePos.y && mousePos.y < rect.top + rect.height;
+
+                // if this is a composite node, we skip it's kids if we are not inside rectangle
+                if ( !layout.isLeafNode() ) {
+                    return inside ? "" : "skip";
+                }
+
+                if ( inside ) {
+                    selectedLayout = layout;
+                    return "break";
+                }
+            }.bind(this));
+            console.log("nExamined", nExamined);
         },
 
         _applyGap : function (value) {

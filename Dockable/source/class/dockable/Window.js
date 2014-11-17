@@ -62,7 +62,7 @@ qx.Class.define('dockable.Window',
                 this.moveTo(rect.left, rect.top);
                 this.setWidth(rect.width);
                 this.setHeight(rect.height);
-                console.log("anim count=", this.m_animCount);
+//                console.log("anim count=", this.m_animCount);
             },
             _animationFrameCB : function ( timePassed )
             {
@@ -88,9 +88,7 @@ qx.Class.define('dockable.Window',
                 this.moveTo(Math.round(rect.left), Math.round(rect.top));
                 this.setWidth(Math.round(rect.width));
                 this.setHeight(Math.round(rect.height));
-
-                this.m_animCount++;
-
+//                this.m_animCount++;
             },
             /**
              * overriden addState method
@@ -132,7 +130,7 @@ qx.Class.define('dockable.Window',
 
                 this.m_startingPositionRect = qx.lang.Object.clone(this.getBounds());
                 this.m_desiredPositionRect = qx.lang.Object.clone(rect);
-                this.m_animCount = 0;
+//                this.m_animCount = 0;
                 this.m_animationFrame.startSequence(this.m_animationDuration);
             },
 

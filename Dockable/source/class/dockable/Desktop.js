@@ -53,19 +53,21 @@ qx.Class.define("dockable.Desktop", {
 
     members : {
 
-        _updateUnderlay : function() {
+        _updateUnderlay : function ()
+        {
             this.m_underlayCanvas.update();
             return;
 
             var count = 0;
-            this.m_layout.forEachLayout( function(layout) {
-                if( ! layout.isLeafNode()) return;
-                if( layout.tenant() != null) return;
+            this.m_layout.forEachLayout(function ( layout )
+            {
+                if ( !layout.isLeafNode() ) return;
+                if ( layout.tenant() != null ) return;
                 var w = this._getAreaWidget(count);
                 var r = layout.rectangle();
                 w.setUserBounds(r.left, r.top, r.width, r.height);
-                w.setHighlighted( layout == this.m_selectedLayout);
-                count ++;
+                w.setHighlighted(layout == this.m_selectedLayout);
+                count++;
             }.bind(this));
 
             // hide unused area widgets
@@ -139,21 +141,28 @@ qx.Class.define("dockable.Desktop", {
         },
 
         /**
+         * Returns a pointer to the current dock layout
+         * @param
+         */
+        dockLayout: function() {
+            return this.m_layout;
+        },
+
+        /**
          * Callback for rendering the underlay canvas.
          * @param e
          * @private
          */
         _bgUnderlayCanvasRedraw : function ( e )
         {
+            this.debug("Underlay redraw");
+
             var data = e.getData();
             var width = data.width;
             var height = data.height;
             var ctx = data.context;
             ctx.clearRect(0, 0, width, height);
             ctx.fillStyle = "rgba(0,0,0,0.1)";
-            if ( ctx.setLineDash ) {
-                ctx.setLineDash([5, 2]);
-            }
 
             this.m_layout.forEachLayout(function ( layout )
             {
@@ -161,16 +170,20 @@ qx.Class.define("dockable.Desktop", {
                 if ( layout.isOccupied() ) return;
 
                 var r = layout.rectangle();
-                ctx.fillRect(r.left, r.top, r.width, r.height);
-            });
+//                ctx.fillRect(r.left, r.top, r.width, r.height);
+                this.roundRect(ctx, r.left, r.top, r.width, r.height, 10, true, false);
+            }.bind(this));
 
             if ( this.m_selectedLayout != null ) {
+                var w = 3;
                 ctx.fillStyle = "rgba(0,0,0,0.1)";
                 var r = this.m_selectedLayout.rectangle();
                 //                ctx.fillRect(r.left, r.top, r.width, r.height);
-                var w = 3;
                 ctx.lineWidth = w;
                 ctx.strokeStyle = "rgba(0,0,0,1)";
+                if ( ctx.setLineDash ) {
+                    ctx.setLineDash([5, 2]);
+                }
                 this.roundRect(ctx, r.left + w / 2, r.top + w / 2, r.width - w, r.height - w, 10, true, true);
             }
         },
@@ -189,11 +202,11 @@ qx.Class.define("dockable.Desktop", {
                     var rw = this._getSplitterWidget(count);
                     rw.setOrientation("horizontal");
                     rw.setPos(rect.left, rect.width, y, kidRectPrev.top, kidRect.top + kidRect.height);
-                    rw.setUserData( "dockInfo", {
-                        ind: row,
-                        layout: layout,
-                        kidRect: kidRect,
-                        kidRectPrev: kidRectPrev
+                    rw.setUserData("dockInfo", {
+                        ind : row,
+                        layout : layout,
+                        kidRect : kidRect,
+                        kidRectPrev : kidRectPrev
                     });
                     count++;
                 }
@@ -204,11 +217,11 @@ qx.Class.define("dockable.Desktop", {
                     var rw = this._getSplitterWidget(count);
                     rw.setOrientation("vertical");
                     rw.setPos(rect.top, rect.height, x, kidRectPrev.left, kidRect.left + kidRect.width);
-                    rw.setUserData( "dockInfo", {
-                        ind: col,
-                        layout: layout,
-                        kidRect: kidRect,
-                        kidRectPrev: kidRectPrev
+                    rw.setUserData("dockInfo", {
+                        ind : col,
+                        layout : layout,
+                        kidRect : kidRect,
+                        kidRectPrev : kidRectPrev
                     });
                     count++;
                 }
@@ -222,7 +235,7 @@ qx.Class.define("dockable.Desktop", {
 
         _getSplitterWidget : function ( ind )
         {
-            if( this._splitterWidgets == null) {
+            if ( this._splitterWidgets == null ) {
                 this._splitterWidgets = [];
             }
             if ( this._splitterWidgets[ind] == null ) {
@@ -232,7 +245,7 @@ qx.Class.define("dockable.Desktop", {
                 this._splitterWidgets[ind] = widget;
                 widget.addListener("moved", this._splitterMovedCB, this);
                 widget.addListener("removeMenu", this._splitterRemoveMenuCB, this);
-                this.getWindowManager().addToOverlay( widget, "aboveDock");
+                this.getWindowManager().addToOverlay(widget, "aboveDock");
             }
 
             var widget = this._splitterWidgets[ind];
@@ -244,7 +257,7 @@ qx.Class.define("dockable.Desktop", {
 
         _getAreaWidget : function ( ind )
         {
-            if( this._areaWidgets == null) {
+            if ( this._areaWidgets == null ) {
                 this._areaWidgets = [];
             }
             if ( this._areaWidgets[ind] == null ) {
@@ -258,7 +271,6 @@ qx.Class.define("dockable.Desktop", {
             return widget;
         },
 
-
         /**
          * callback for splitter moved events
          * @private
@@ -266,12 +278,13 @@ qx.Class.define("dockable.Desktop", {
         _splitterMovedCB : function ( ev )
         {
             var data = ev.getData();
-            var dInfo = data.splitter.getUserData( "dockInfo");
+            var dInfo = data.splitter.getUserData("dockInfo");
 
-            if( data.splitter.getOrientation() == "horizontal") {
-                dInfo.layout.adjustRowToStartAt( dInfo.ind, data.pos);
-            } else {
-                dInfo.layout.adjustColumnToStartAt( dInfo.ind, data.pos);
+            if ( data.splitter.getOrientation() == "horizontal" ) {
+                dInfo.layout.adjustRowToStartAt(dInfo.ind, data.pos);
+            }
+            else {
+                dInfo.layout.adjustColumnToStartAt(dInfo.ind, data.pos);
             }
             this._afterLayoutRectanglesAdjusted();
         },
@@ -283,16 +296,16 @@ qx.Class.define("dockable.Desktop", {
         _splitterRemoveMenuCB : function ( ev )
         {
             var data = ev.getData();
-            var dInfo = data.splitter.getUserData( "dockInfo");
+            var dInfo = data.splitter.getUserData("dockInfo");
 
-            if( data.splitter.getOrientation() == "horizontal") {
-                dInfo.layout.removeRow( dInfo.ind - 1);
-            } else {
-                dInfo.layout.removeColumn( dInfo.ind - 1);
+            if ( data.splitter.getOrientation() == "horizontal" ) {
+                dInfo.layout.removeRow(dInfo.ind - 1);
+            }
+            else {
+                dInfo.layout.removeColumn(dInfo.ind - 1);
             }
             this._afterLayoutRectanglesAdjusted();
         },
-
 
         /**
          * Callback for rendering overlay canvas. Renders the resize bars
@@ -367,21 +380,39 @@ qx.Class.define("dockable.Desktop", {
             });
         },
 
-        addd : function ( win )
-        {
-            this.add(win);
-            win.addListener("moving", this._windowMovingCB.bind(this, win));
-            win.addListener("movingDone", this._windowMovingDoneCB.bind(this, win));
-            win.addListener("movingStart", this._windowMovingStartCB.bind(this, win));
+//        addd : function ( win )
+//        {
+//            this.add(win);
+//            win.addListener("moving", this._windowMovingCB.bind(this, win));
+//            win.addListener("movingDone", this._windowMovingDoneCB.bind(this, win));
+//            win.addListener("movingStart", this._windowMovingStartCB.bind(this, win));
+//
+//            this.getWindowManager().updateStack();
+//        },
 
-            this.getWindowManager().updateStack();
+        /**
+         * Overrides the method {@link qx.ui.core.Widget#_afterAddChild}
+         *
+         * @param win {qx.ui.core.Widget} added widget
+         */
+        _afterAddChild : function(win)
+        {
+            this.base( arguments, win);
+            if (qx.Class.isDefined("dockable.Window") && win instanceof dockable.Window) {
+                win.addListener("moving", this._windowMovingCB.bind(this, win));
+                win.addListener("movingDone", this._windowMovingDoneCB.bind(this, win));
+                win.addListener("movingStart", this._windowMovingStartCB.bind(this, win));
+
+                this.getWindowManager().updateStack();
+            }
         },
+
 
         _windowMovingDoneCB : function ( win )
         {
             win.setDockLayout(this.m_selectedLayout);
             if ( this.m_selectedLayout != null ) {
-//                win.setPositionRect(this.m_selectedLayout.rectangle());
+                //                win.setPositionRect(this.m_selectedLayout.rectangle());
                 this.m_selectedLayout.setTenant(win);
                 this.m_selectedLayout = null;
             }
@@ -416,21 +447,35 @@ qx.Class.define("dockable.Desktop", {
             mousePos.y -= this.getContentLocation().top;
 
             // find layout under cursor (only consider available layouts)
-            this.m_selectedLayout = null;
+            var nExamined = 0;
+            var selectedLayout = null;
+            //            this.m_selectedLayout = null;
             this.m_layout.forEachLayout(function ( layout )
             {
-                if ( !layout.isLeafNode() ) return;
+                nExamined++;
                 if ( layout.isOccupied() ) return;
 
                 var rect = layout.rectangle();
-                if ( rect.left < mousePos.x && mousePos.x < rect.left + rect.width
-                    && rect.top < mousePos.y && mousePos.y < rect.top + rect.height ) {
-                    this.m_selectedLayout = layout;
+                var inside = rect.left < mousePos.x && mousePos.x < rect.left + rect.width
+                    && rect.top < mousePos.y && mousePos.y < rect.top + rect.height;
+
+                // if this is a composite node, we skip it's kids if we are not inside rectangle
+                if ( !layout.isLeafNode() ) {
+                    return inside ? "" : "skip";
+                }
+
+                if ( inside ) {
+                    selectedLayout = layout;
                     return "break";
                 }
             }.bind(this));
+            console.log("nExamined", nExamined);
 
-            this._updateUnderlay();
+            // update the underlay with the selected layout
+            if ( selectedLayout !== this.m_selectedLayout ) {
+                this.m_selectedLayout = selectedLayout;
+                this._updateUnderlay();
+            }
         },
 
         /**

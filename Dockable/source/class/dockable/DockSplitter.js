@@ -1,6 +1,8 @@
 /**
  * The aDockSplitter is the widget between docked windows that allows
  * the user to drag it and thus resize the dock areas (and any docked windows in those).
+ *
+ * @asset(dockable/*)
  */
 
 qx.Class.define("dockable.DockSplitter", {
@@ -27,7 +29,9 @@ qx.Class.define("dockable.DockSplitter", {
         this.addListener("pointerout", this._onPointerOut, this);
         //        this.addListener("losecapture", this._onPointerUp, this);
 
-        this.setContextMenu(this._makeContextMenu());
+//        this.setContextMenu(this._makeContextMenu());
+
+        this.addListener("contextmenu", this._contextmenuCB, this);
 
     },
 
@@ -231,23 +235,48 @@ qx.Class.define("dockable.DockSplitter", {
             }
         },
 
+        _contextmenuCB : function(e)
+        {
+            // only allow long tap context menu on touch interactions
+            if (e.getType() == "longtap") {
+                if (e.getPointerType() !== "touch") {
+                    return;
+                }
+            }
+
+            var cb = function( what) {
+                this.debug("what=", what);
+            }.bind(this);
+            var mgr = dockable.SplitterMenuManager.getInstance();
+            mgr.showMenuAtPointer(e, {
+                orientation: this.getOrientation()
+            }, cb);
+            e.stop();
+
+            return;
+
+            mgr.setOrientation( this.getOrientation());
+            var menu = mgr.getMenu();
+            menu.setOpener(this);
+            menu.openAtPointer(e);
+
+            // Do not show native menu
+            // don't open any other contextmenus
+            e.stop();
+        },
+
+
         _makeContextMenu : function ()
         {
-            var menu = new qx.ui.menu.Menu();
+            var mgr = dockable.SplitterMenuManager.getInstance();
+            mgr.setOrientation( this.getOrientation());
+            var menu = mgr.getMenu();
 
-            var removeButton = new qx.ui.menu.Button("Remove");
-            var copyButton = new qx.ui.menu.Button("Duplicate");
-            var pasteButton = new qx.ui.menu.Button("Split here");
-
-            menu.add(removeButton);
-            menu.add(copyButton);
-            menu.add(pasteButton);
-
-            removeButton.addListener("execute", function ()
-            {
-                this.fireDataEvent("removeMenu", { splitter : this, pos : this._center });
-            }, this);
-
+//            mgr.button("remove").addListener("execute", function ()
+//            {
+//                this.fireDataEvent("removeMenu", { splitter : this, pos : this._center });
+//            }, this);
+//
             return menu;
         },
 
