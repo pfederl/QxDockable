@@ -391,6 +391,30 @@ qx.Class.define("dockable.Desktop", {
 //        },
 
         /**
+         * Overrides
+         * @param win
+         * @private
+         */
+        _addWindow:function(win){
+            console.log("_afterAddWindow[desktop]");
+            var firstTime = ! qx.lang.Array.contains(this.getWindows(), win);
+            this.base(arguments,win);
+            if( firstTime) {
+                // listen for middle clicks on caption bar
+                win.getChildControl( "captionbar").addListener( "pointerdown", function(e){
+                    console.log("pointer down on captionbar", e);
+                    if( e.isMiddlePressed()) {
+                        this.getWindowManager().sendToBack( win);
+                        win.setActive(false);
+//                        qx.lang.Array.remove(this.getWindows(), win);
+//                        this.getWindows().push(win);
+//                        this.getWindowManager().updateStack();
+                    }
+                }.bind(this),true);
+            }
+        },
+
+        /**
          * Overrides the method {@link qx.ui.core.Widget#_afterAddChild}
          *
          * @param win {qx.ui.core.Widget} added widget
@@ -398,40 +422,86 @@ qx.Class.define("dockable.Desktop", {
         _afterAddChild : function(win)
         {
             this.base( arguments, win);
+
             if (qx.Class.isDefined("dockable.Window") && win instanceof dockable.Window) {
                 win.addListener("moving", this._windowMovingCB.bind(this, win));
                 win.addListener("movingDone", this._windowMovingDoneCB.bind(this, win));
                 win.addListener("movingStart", this._windowMovingStartCB.bind(this, win));
+                win.addListener("maximize", this._windowMaximizeCB.bind(this, win));
+                win.addListener("close", this._windowCloseCB.bind(this, win));
+                win.addListener("minimize", this._windowMinimizeCB.bind(this, win));
+                win.addListener("restore", this._windowRestoreCB.bind(this, win));
 
                 this.getWindowManager().updateStack();
             }
         },
 
-
-        _windowMovingDoneCB : function ( win )
-        {
-            win.setDockLayout(this.m_selectedLayout);
-            if ( this.m_selectedLayout != null ) {
-                //                win.setPositionRect(this.m_selectedLayout.rectangle());
-                this.m_selectedLayout.setTenant(win);
-                this.m_selectedLayout = null;
-            }
-            this._updateUnderlay();
+        /**
+         * Callback for window maximize.
+         * @param win {dockable.Window}
+         * @private
+         */
+        _windowMaximizeCB : function ( win) {
             this.getWindowManager().updateStack();
         },
 
+        /**
+         * Callback for window close.
+         * @param win {dockable.Window}
+         * @private
+         */
+        _windowCloseCB : function ( win) {
+            this.getWindowManager().updateStack();
+        },
+
+        /**
+         * Callback for window minimize.
+         * @param win {dockable.Window}
+         * @private
+         */
+        _windowMinimizeCB : function ( win) {
+            this.getWindowManager().updateStack();
+        },
+
+        /**
+         * Callback for window restore.
+         * @param win {dockable.Window}
+         * @private
+         */
+        _windowRestoreCB : function ( win) {
+            this.getWindowManager().updateStack();
+        },
+
+        /**
+         * Callback for when window moving starts.
+         *
+         * @param win {dockable.Window}
+         * @protected
+         */
         _windowMovingStartCB : function ( win )
         {
-            var currLayout = win.dockLayout();
-            if ( currLayout != null ) {
-                currLayout.setTenant(null);
-                win.setDockLayout(null);
-                this.m_selectedLayout = currLayout;
-            }
-            this._updateUnderlay();
-            this.getWindowManager().updateStack();
+//            this.m_selectedLayout = win.dockLayout();
+//            this.dockWindowToLayout( win, null);
+
+
+
+//            var currLayout = win.dockLayout();
+//            if ( currLayout != null ) {
+//                currLayout.setTenant(null);
+//                win.setDockLayout(null);
+//                this.m_selectedLayout = currLayout;
+//            }
+//            this._updateUnderlay();
+//            this.getWindowManager().updateStack();
         },
 
+        /**
+         * Callback for when window moving is in progress.
+         *
+         * @param win {dockable.Window}
+         * @param e {qx.event.type.Pointer}
+         * @protected
+         */
         _windowMovingCB : function ( win, e )
         {
             // unoccupy the layout of this window
@@ -476,6 +546,51 @@ qx.Class.define("dockable.Desktop", {
                 this.m_selectedLayout = selectedLayout;
                 this._updateUnderlay();
             }
+        },
+
+        /**
+         * Callback for when window moving is finished.
+         *
+         * @param win {dockable.Window}
+         * @protected
+         */
+        _windowMovingDoneCB : function ( win )
+        {
+            // if the window already has a layout, don't do anything (user
+            // probably just clicked on the window and relased the button)
+            if( win.dockLayout() != null) {
+                return;
+            }
+            // assign the selected layout to the window
+            this.dockWindowToLayout( win, this.m_selectedLayout);
+            this.m_selectedLayout = null;
+//            win.setDockLayout(this.m_selectedLayout);
+//            if ( this.m_selectedLayout != null ) {
+//                this.m_selectedLayout.setTenant(win);
+//                this.m_selectedLayout = null;
+//            }
+            this._updateUnderlay();
+            this.getWindowManager().updateStack();
+        },
+
+        /**
+         * Docks the window to the given layout. If null, the window is undocked.
+         * @param win {dockable.Window} The window.
+         * @param layout {dockable.DockLayout?null} The layout.
+         */
+        dockWindowToLayout : function ( win, layout) {
+            // if the window was previously docked, undock it
+            if( win.dockLayout() != null) {
+                win.dockLayout().setTenant(null);
+                win.setDockLayout(null);
+            }
+            // now dock the window to the new layout
+            win.setDockLayout( layout);
+            if( layout != null) {
+                layout.setTenant( win);
+            }
+            this._updateUnderlay();
+            this.getWindowManager().updateStack();
         },
 
         /**
