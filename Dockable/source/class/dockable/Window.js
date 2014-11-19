@@ -18,7 +18,6 @@ qx.Class.define('dockable.Window',
             this.m_movingDoneDeferred = new qx.util.DeferredCall(
                 this.fireEvent.bind(this, "movingDone"));
             this.DEFAULT_ANIMATION_DURATION = 150;
-
         },
 
         /**
@@ -47,7 +46,6 @@ qx.Class.define('dockable.Window',
                 refine : true,
                 init : "window"
             }
-
         },
 
         /**
@@ -227,8 +225,13 @@ qx.Class.define('dockable.Window',
                 }.bind(this));
             },
 
+//            _setDesktop : function(desktop) {
+//                this.m_desktop = desktop;
+//            },
+
             m_movingDoneDeferred : null,
             m_animationFrame : null,
             m_dockLayout : null
+//            m_desktop : null
         }
     });

@@ -39,7 +39,7 @@ qx.Class.define("dockable.Desktop", {
         this.m_overlayCanvas.getContentElement().setStyle("pointer-events", "none", true);
         this.m_overlayCanvas.exclude();
 
-        this.addListener("resize", this._onDesktopResize, this);
+        this.addListener("resize", this._desktopResizeCB, this);
 
         this.addListener("pointermove", this._pointermoveCB, this, true);
         this.addListener("keydown", function ( e )
@@ -348,7 +348,7 @@ qx.Class.define("dockable.Desktop", {
          * @param e {Event}
          * @private
          */
-        _onDesktopResize : function ( e )
+        _desktopResizeCB : function ( e )
         {
             var bounds = e.getData();
 
@@ -391,12 +391,11 @@ qx.Class.define("dockable.Desktop", {
 //        },
 
         /**
-         * Overrides
+         * Overrides MDesktop's _addWindow
          * @param win
          * @private
          */
         _addWindow:function(win){
-            console.log("_afterAddWindow[desktop]");
             var firstTime = ! qx.lang.Array.contains(this.getWindows(), win);
             this.base(arguments,win);
             if( firstTime) {
@@ -431,8 +430,24 @@ qx.Class.define("dockable.Desktop", {
                 win.addListener("close", this._windowCloseCB.bind(this, win));
                 win.addListener("minimize", this._windowMinimizeCB.bind(this, win));
                 win.addListener("restore", this._windowRestoreCB.bind(this, win));
+                win.addListener("changeAlwaysOnTop", this._windowAlwaysOnTopChangedCB.bind(this, win));
+
+                // let the window know who's it's daddy
+//                win._setDesktop( this);
 
                 this.getWindowManager().updateStack();
+            }
+        },
+
+        /**
+         * Callback for window changing it's alwaysOnTop status.
+         * @param win {dockable.Window}
+         * @private
+         */
+        _windowAlwaysOnTopChangedCB : function( win, e) {
+            console.log("setStayAlwaysOnTop", e.getOldData(), "-->", e.getData());
+            if( e.getData()) {
+                this.dockWindowToLayout(win, null);
             }
         },
 
@@ -451,7 +466,7 @@ qx.Class.define("dockable.Desktop", {
          * @private
          */
         _windowCloseCB : function ( win) {
-            this.getWindowManager().updateStack();
+            this.dockWindowToLayout( win, null);
         },
 
         /**
@@ -460,7 +475,7 @@ qx.Class.define("dockable.Desktop", {
          * @private
          */
         _windowMinimizeCB : function ( win) {
-            this.getWindowManager().updateStack();
+            this.dockWindowToLayout( win, null);
         },
 
         /**
@@ -480,19 +495,12 @@ qx.Class.define("dockable.Desktop", {
          */
         _windowMovingStartCB : function ( win )
         {
-//            this.m_selectedLayout = win.dockLayout();
-//            this.dockWindowToLayout( win, null);
-
-
-
-//            var currLayout = win.dockLayout();
-//            if ( currLayout != null ) {
-//                currLayout.setTenant(null);
-//                win.setDockLayout(null);
-//                this.m_selectedLayout = currLayout;
-//            }
-//            this._updateUnderlay();
-//            this.getWindowManager().updateStack();
+            window.win = win;
+//            console.log( "getBounds", this.getBounds());
+//            console.log( "getContentLocation()", this.getContentLocation());
+//            console.log( "getContentLocation(box)", this.getContentLocation("box"));
+//            console.log( "getContentLocation(padding)", this.getContentLocation("padding"));
+//            console.log( "getContentLocation(margin)", this.getContentLocation("margin"));
         },
 
         /**

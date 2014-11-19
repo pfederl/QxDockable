@@ -69,6 +69,7 @@ qx.Class.define("dockable.Application",
                 layout.setKidLayout( 0, 3, subl);
 
                 mainDock.setDockLayout(layout);
+                mainDock.setMarginLeft( 100);
 
                 var topBar = new qx.ui.container.Composite(new qx.ui.layout.HBox(5));
                 topBar.setBackgroundColor("#ff0000");

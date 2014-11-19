@@ -351,37 +351,6 @@ qx.Class.define('dockable.DockLayout', {
             }
         },
 
-        /**
-         * Finds a layout under position x,y
-         * @param x {Number}
-         * @param y {Number}
-         */
-        findLayoutXY : function ( x, y) {
-            var nExamined = 0;
-            var selectedLayout = null;
-            //            this.m_selectedLayout = null;
-            this.forEachLayout(function ( layout )
-            {
-                nExamined++;
-                if ( layout.isOccupied() ) return;
-
-                var rect = layout.rectangle();
-                var inside = rect.left < mousePos.x && mousePos.x < rect.left + rect.width
-                    && rect.top < mousePos.y && mousePos.y < rect.top + rect.height;
-
-                // if this is a composite node, we skip it's kids if we are not inside rectangle
-                if ( !layout.isLeafNode() ) {
-                    return inside ? "" : "skip";
-                }
-
-                if ( inside ) {
-                    selectedLayout = layout;
-                    return "break";
-                }
-            }.bind(this));
-            console.log("nExamined", nExamined);
-        },
-
         _applyGap : function (value) {
             this.recomputeRectangles( this.rectangle());
         }
